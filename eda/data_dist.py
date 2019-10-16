@@ -15,10 +15,6 @@ class DataDistribution(EDABase):
     col_names: [str]
         Column names which should be used in data
         distribution visualization
-
-    Attributes
-    ----------
-
     """
     
     def __init__(self, col_names):
@@ -39,7 +35,7 @@ class DataDistribution(EDABase):
         self.gen_histograms(X)
 
     def gen_histograms(self, X: pd.DataFrame) -> None:
-        """Generates histogram for each feature
+        """ Generates histogram for each feature
         and saves as a picture in the path folder
         
         Parameters
@@ -54,7 +50,8 @@ class DataDistribution(EDABase):
         cols_all_names = X.columns
         for i, name in enumerate(cols_all_names):
             if name in self.col_names:
+                print(name)
                 ax_temp = sns.distplot(X.iloc[:, i],
                                        axlabel=cols_all_names[i])
-                ax_temp.savefig(PATH_RESULTS_EDA + "/" 
+                ax_temp.figure.savefig(PATH_RESULTS_EDA + "/" 
                                 + cols_all_names[i]+ ".png")
