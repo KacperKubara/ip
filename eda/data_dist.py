@@ -33,10 +33,11 @@ class DataDistribution(EDABase):
         None
         """
         self.gen_histograms(X)
+        self.gen_boxplots(X)
 
     def gen_histograms(self, X: pd.DataFrame) -> None:
         """ Generates histogram for each feature
-        and saves as a picture in the path folder
+        and saves as a picture in the specified path folder
         
         Parameters
         ----------
@@ -48,10 +49,36 @@ class DataDistribution(EDABase):
         None
         """
         cols_all_names = X.columns
+        print("Histograms")
         for i, name in enumerate(cols_all_names):
             if name in self.col_names:
                 print(name)
-                ax_temp = sns.distplot(X.iloc[:, i],
+                ax_temp = sns.distplot(X.iloc[:, i], kde=False,
                                        axlabel=cols_all_names[i])
                 ax_temp.figure.savefig(PATH_RESULTS_EDA + "/" 
-                                + cols_all_names[i]+ ".png")
+                                + cols_all_names[i] + "_hist.png")
+                plt.clf()
+        
+    def gen_boxplots(self, X: pd.DataFrame) -> None:
+        """ Generates boxplots for each feature
+        and saves as a picture in the specified path folder
+        
+        Parameters
+        ----------
+        X : pandas DataFrame
+            Data which has to be visualized
+
+        Returns
+        -------
+        None
+        """
+        cols_all_names = X.columns
+        print("Boxplots")
+        for i, name in enumerate(cols_all_names):
+            if name in self.col_names:
+                print(name)
+                ax_temp = sns.boxplot(data=X[name])
+                ax_temp.figure.savefig(PATH_RESULTS_EDA + "/"
+                                       + cols_all_names[i] + "_boxplots.png")
+                plt.clf()
+                

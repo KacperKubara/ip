@@ -18,7 +18,7 @@ cols_with_str = [
 if __name__ == "__main__":
     df = load_sol_challenge()
 
-    # Data Preprocessing part - transform it into a class later on
+    # Data Preprocessing
     preprocessor = PreProcessor()
     df = preprocessor.str_to_float(df, cols_with_str)
     df = preprocessor.remove_nans(df)
