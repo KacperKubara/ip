@@ -15,10 +15,15 @@ class DataDistribution(EDABase):
     col_names: [str]
         Column names which should be used in data
         distribution visualization
+
+    ignore_outliers: bool
+        Flag to indicate whether outliers should be ignored.
+        Based on the Z Score = 3
     """
     
-    def __init__(self, col_names):
+    def __init__(self, col_names, ignore_outliers=True):
         self.col_names = col_names
+        self.ignore_outliers = ignore_outliers
     
     def run(self, X: pd.DataFrame) -> None:
         """ Runs specific EDA model
@@ -34,6 +39,7 @@ class DataDistribution(EDABase):
         """
         self.gen_histograms(X)
         self.gen_boxplots(X)
+        print("Data Distribution Visualization finished")
 
     def gen_histograms(self, X: pd.DataFrame) -> None:
         """ Generates histogram for each feature
@@ -52,8 +58,13 @@ class DataDistribution(EDABase):
         print("Histograms")
         for i, name in enumerate(cols_all_names):
             if name in self.col_names:
-                print(name)
-                ax_temp = sns.distplot(X.iloc[:, i], kde=False,
+                data = X.iloc[:, i]
+                if self.ignore_outliers is False:
+                    # Remove outliers
+                    data = data[(data < data.mean() + 3*data.std())
+                                & (data > data.mean() - 3*data.std())].reset_index(drop=True)
+
+                ax_temp = sns.distplot(data, kde=False,
                                        axlabel=cols_all_names[i])
                 ax_temp.figure.savefig(PATH_RESULTS_EDA + "/" 
                                 + cols_all_names[i] + "_hist.png")
@@ -76,8 +87,12 @@ class DataDistribution(EDABase):
         print("Boxplots")
         for i, name in enumerate(cols_all_names):
             if name in self.col_names:
-                print(name)
-                ax_temp = sns.boxplot(data=X[name])
+                data = X.iloc[:, i]
+                if self.ignore_outliers is False:
+                    # Remove outliers
+                    data = data[(data < data.mean() + 3*data.std())
+                                & (data > data.mean() - 3*data.std())].reset_index(drop=True)
+                ax_temp = sns.boxplot(data=data)
                 ax_temp.figure.savefig(PATH_RESULTS_EDA + "/"
                                        + cols_all_names[i] + "_boxplots.png")
                 plt.clf()

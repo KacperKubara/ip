@@ -24,5 +24,5 @@ if __name__ == "__main__":
     df = preprocessor.remove_nans(df)
 
     # EDA
-    data_distribution = DataDistribution(cols_to_analyse)
+    data_distribution = DataDistribution(cols_to_analyse, ignore_outliers=False)
     data_distribution.run(df)
