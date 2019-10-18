@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from eda import EDABase
-from config import PATH_RESULTS_EDA
+from config import PATH_RESULTS_EDA_DIST
 
 class DataDistribution(EDABase):
     """ Data distribution class which visualizes
@@ -37,9 +37,11 @@ class DataDistribution(EDABase):
         -------
         None
         """
+        print("Histograms")
         self.gen_histograms(X)
+        print("Boxplots")
         self.gen_boxplots(X)
-        print("Data Distribution Visualization finished")
+        print("Data Distribution Visualization finished\n")
 
     def gen_histograms(self, X: pd.DataFrame) -> None:
         """ Generates histogram for each feature
@@ -55,7 +57,6 @@ class DataDistribution(EDABase):
         None
         """
         cols_all_names = X.columns
-        print("Histograms")
         for i, name in enumerate(cols_all_names):
             if name in self.col_names:
                 data = X.iloc[:, i]
@@ -66,7 +67,7 @@ class DataDistribution(EDABase):
 
                 ax_temp = sns.distplot(data, kde=False,
                                        axlabel=cols_all_names[i])
-                ax_temp.figure.savefig(PATH_RESULTS_EDA + "/" 
+                ax_temp.figure.savefig(PATH_RESULTS_EDA_DIST + "/" 
                                 + cols_all_names[i] + "_hist.png")
                 plt.clf()
         
@@ -84,7 +85,6 @@ class DataDistribution(EDABase):
         None
         """
         cols_all_names = X.columns
-        print("Boxplots")
         for i, name in enumerate(cols_all_names):
             if name in self.col_names:
                 data = X.iloc[:, i]
@@ -93,7 +93,7 @@ class DataDistribution(EDABase):
                     data = data[(data < data.mean() + 3*data.std())
                                 & (data > data.mean() - 3*data.std())].reset_index(drop=True)
                 ax_temp = sns.boxplot(data=data)
-                ax_temp.figure.savefig(PATH_RESULTS_EDA + "/"
+                ax_temp.figure.savefig(PATH_RESULTS_EDA_DIST + "/"
                                        + cols_all_names[i] + "_boxplots.png")
                 plt.clf()
                 

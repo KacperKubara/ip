@@ -1,7 +1,7 @@
 """ EDA, ML pipeline script for Solubility Challenge Datasets"""
 import pandas as pd 
 
-from eda import DataDistribution
+from eda import DataDistribution, FeatureCorrelation
 from data import load_sol_challenge
 from preprocessing import PreProcessor
 
@@ -24,5 +24,9 @@ if __name__ == "__main__":
     df = preprocessor.remove_nans(df)
 
     # EDA
+    # Data Distribution
     data_distribution = DataDistribution(cols_to_analyse, ignore_outliers=False)
     data_distribution.run(df)
+    # Feature Correlation
+    feature_correlation = FeatureCorrelation(cols_to_analyse, figsize=(9, 9))
+    feature_correlation.run(df)
