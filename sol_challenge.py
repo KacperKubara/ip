@@ -56,6 +56,7 @@ if __name__ == "__main__":
     preprocessor = PreProcessor()
     df = preprocessor.str_to_float(df, cols_with_str)
     df = preprocessor.remove_nans(df)
+    
     # EDA
     # Data Distribution
     data_distribution = DataDistribution(cols_to_analyse, ignore_outliers=False)
@@ -67,8 +68,6 @@ if __name__ == "__main__":
     # Get independent and dependent variables
     X = np.asarray(df[X_names_num])
     y = np.asarray(df[y_name])
-    print(X[:10])
-    print(y[:10])
     # Small amount of data -> use KFold CV
     kfold = KFold(n_splits = 5, random_state=42)
     # Define models
