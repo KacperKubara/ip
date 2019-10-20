@@ -5,7 +5,7 @@ from sklearn.model_selection import KFold
 from sklearn.linear_model import Lasso
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error as mse
+from sklearn.metrics import mean_absolute_error as mae
 from xgboost import XGBRegressor
 
 from eda import DataDistribution, FeatureCorrelation
@@ -32,7 +32,7 @@ X_names_num = [
     'Temperature', 'assays', 'Ionic Strength (M)',
     'S0 (mM)', 'SD of S0 (mM)'
         ]
-models = {
+models_dict = {
     "lasso": {
         "model": Lasso(),
         "params": []
@@ -68,21 +68,25 @@ if __name__ == "__main__":
     # Get independent and dependent variables
     X = np.asarray(df[X_names_num])
     y = np.asarray(df[y_name])
-    # Small amount of data -> use KFold CV
+    
+    # Small amount of data -> use KFold CV instead of train test split
     kfold = KFold(n_splits = 5, random_state=42)
-    # Define models
-    lasso = Lasso()
-    results = []
-    for train_ix, test_ix in kfold.split(X):
-        # Fit
-        lasso.fit(X[train_ix], y[train_ix])
-        # Predict
-        y_pred = lasso.predict(X[test_ix])
-        print(f"y_pred: {y_pred}")
-        print(f"y_test: {y[test_ix]}")
-        # Compute MSE
-        result_temp = mse(y[test_ix], y_pred)
-        print(f"Result_temp: {result_temp}")
-        results.append(result_temp)
-    results_average = average(results)
-    print(f"Averaged MSE Result: {results_average}")
+    # Iterate over models
+    results = {}
+    for model_name in models_dict.keys():
+        model = models_dict[model_name]["model"]
+        if model == "lasso":
+            # Additional preprocessing step here
+            pass
+
+        results_temp = []
+        for train_ix, test_ix in kfold.split(X):
+            # Fit
+            model.fit(X[train_ix], y[train_ix])
+            # Predict
+            y_pred = model.predict(X[test_ix])
+            # Compute MSE
+            results_temp.append(mae(y[test_ix], y_pred))
+        results[model_name] = average(results_temp)
+
+    print(f"Averaged MAE Result: {results}")
