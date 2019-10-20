@@ -21,6 +21,7 @@ class PreProcessor():
         pd.DataFrame : 
             Data without NaN values
         """
+        X = X[~X.isin(['NaN', 'NaT']).any(axis=1)]
         return X.dropna()
 
     def str_to_float(self, X: pd.DataFrame, col_names: list) -> pd.DataFrame:
