@@ -6,6 +6,7 @@ from sklearn.linear_model import Lasso
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error as mae
+from sklearn.model_selection import RandomizedSearchCV
 from xgboost import XGBRegressor
 
 from eda import DataDistribution, FeatureCorrelation

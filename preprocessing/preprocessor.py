@@ -47,7 +47,7 @@ class PreProcessor():
         return X
 
     def _lambda_func_str_to_float(self, val):
-        """ CHelper function for str_to_float()
+        """ Helper function for str_to_float()
         
         Parameters
         ----------
