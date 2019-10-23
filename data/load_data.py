@@ -1,8 +1,8 @@
 """ Utility functions to load the data"""
 import pandas as pd 
 
-path = "/home/kacper/Desktop/Github/ip/data/solubility_challenge_train.csv"
+from config import PATH_SOL_DATA
 
 def load_sol_challenge() -> pd.DataFrame:
     """ Load Solubility Challenge dataset"""
-    return pd.read_csv(path, delimiter=",")
+    return pd.read_csv(PATH_SOL_DATA, delimiter=",")

@@ -1,6 +1,7 @@
 """ EDA, ML pipeline script for Solubility Challenge Datasets"""
 import pandas as pd
 import numpy as np
+
 from sklearn.model_selection import KFold 
 from sklearn.linear_model import Lasso
 from sklearn.svm import SVR
@@ -12,7 +13,7 @@ from xgboost import XGBRegressor
 from eda import DataDistribution, FeatureCorrelation
 from data import load_sol_challenge
 from preprocessing import PreProcessor
-from utils import average
+from config import PATH_RESULTS
 
 cols_to_analyse = [
     "Temperature", "assays", "Ionic Strength (M)",
@@ -39,7 +40,7 @@ models_dict = {
         "params": []
     },
     "SVR": {
-        "model": SVR(),
+        "model": SVR(gamma='auto'),
         "params": []
     },
     "RandomForest": {
@@ -51,6 +52,7 @@ models_dict = {
         "params": []
     }
 }
+
 if __name__ == "__main__":
     df = load_sol_challenge()
     # Data Preprocessing
@@ -88,6 +90,8 @@ if __name__ == "__main__":
             y_pred = model.predict(X[test_ix])
             # Compute MSE
             results_temp.append(mae(y[test_ix], y_pred))
-        results[model_name] = average(results_temp)
-
+        results[model_name] = {}
+        results[model_name]["mean"] = [np.mean(results_temp)]
+        results[model_name]["var"] = [np.var(results_temp)]
+    pd.DataFrame(results).to_csv(PATH_RESULTS + "/results.csv")
     print(f"Averaged MAE Result: {results}")

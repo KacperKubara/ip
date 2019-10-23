@@ -1,4 +1,6 @@
 """Configuration file for paths, setting, etc."""
 PATH_EDA = "./eda"
-PATH_RESULTS_EDA_DIST = "./results/eda/distribution"
-PATH_RESULTS_EDA_CORR = "./results/eda/correlation"
+PATH_RESULTS = "./results/sol_challenge"
+PATH_RESULTS_EDA_DIST = "./results/sol_challenge/eda/distribution"
+PATH_RESULTS_EDA_CORR = "./results/sol_challenge/eda/correlation"
+PATH_SOL_DATA = "C:/Users/kacpe/Desktop/Github/ip/data/solubility_challenge_train.csv"
