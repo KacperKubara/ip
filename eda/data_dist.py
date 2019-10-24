@@ -4,7 +4,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from eda import EDABase
-from config import PATH_RESULTS_EDA_DIST
 
 class DataDistribution(EDABase):
     """ Data distribution class which visualizes
@@ -21,9 +20,10 @@ class DataDistribution(EDABase):
         Based on the Z Score = 3
     """
     
-    def __init__(self, col_names, ignore_outliers=True):
+    def __init__(self, col_names, path_save, ignore_outliers=True):
         self.col_names = col_names
         self.ignore_outliers = ignore_outliers
+        self.path_save = path_save
     
     def run(self, X: pd.DataFrame) -> None:
         """ Runs specific EDA model
@@ -67,7 +67,7 @@ class DataDistribution(EDABase):
 
                 ax_temp = sns.distplot(data, kde=False,
                                        axlabel=cols_all_names[i])
-                ax_temp.figure.savefig(PATH_RESULTS_EDA_DIST + "/" 
+                ax_temp.figure.savefig(self.path_save + "/" 
                                 + cols_all_names[i] + "_hist.png")
                 plt.clf()
         
@@ -93,7 +93,7 @@ class DataDistribution(EDABase):
                     data = data[(data < data.mean() + 3*data.std())
                                 & (data > data.mean() - 3*data.std())].reset_index(drop=True)
                 ax_temp = sns.boxplot(data=data)
-                ax_temp.figure.savefig(PATH_RESULTS_EDA_DIST + "/"
+                ax_temp.figure.savefig(self.path_save + "/"
                                        + cols_all_names[i] + "_boxplots.png")
                 plt.clf()
                 

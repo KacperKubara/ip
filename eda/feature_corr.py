@@ -3,7 +3,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt 
 
 from eda import EDABase
-from config import PATH_RESULTS_EDA_CORR
 
 class FeatureCorrelation(EDABase):
     """ Feature correlation class which visualizes the 
@@ -19,9 +18,10 @@ class FeatureCorrelation(EDABase):
         Size of the figure which will be saved as a file
     """
 
-    def __init__(self, col_names, figsize=(10,10)):
+    def __init__(self, col_names, path_save, figsize=(10,10)):
         self.col_names = col_names
         self.figsize = figsize
+        self.path_save = path_save
     
     def run(self, X: pd.DataFrame) -> None:
         """ Runs specific EDA model
@@ -58,13 +58,13 @@ class FeatureCorrelation(EDABase):
         plt.figure(figsize=self.figsize)
         
         ax_temp = sns.heatmap(data=data.corr())
-        ax_temp.figure.savefig(PATH_RESULTS_EDA_CORR + "/"
+        ax_temp.figure.savefig(self.path_save + "/"
                         + "heatmap_pearson.png", bbox_inches="tight")
         ax_temp.set_xticklabels(ax_temp.get_yticklabels(), rotation =90)
         plt.clf()
 
         ax_temp = sns.heatmap(data=data.corr(method="spearman"))
-        ax_temp.figure.savefig(PATH_RESULTS_EDA_CORR + "/"
+        ax_temp.figure.savefig(self.path_save + "/"
                         + "heatmap_spearman.png", bbox_inches="tight")
         ax_temp.set_xticklabels(ax_temp.get_yticklabels(), rotation =90)        
         plt.clf()

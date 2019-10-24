@@ -13,7 +13,8 @@ from xgboost import XGBRegressor
 from eda import DataDistribution, FeatureCorrelation
 from data import load_sol_challenge
 from preprocessing import PreProcessor
-from config import PATH_RESULTS
+from config import PATH_RESULTS, PATH_RESULTS_EDA_CORR,\
+    PATH_RESULTS_EDA_DIST
 
 cols_to_analyse = [
     "Temperature", "assays", "Ionic Strength (M)",
@@ -62,10 +63,10 @@ if __name__ == "__main__":
     
     # EDA
     # Data Distribution
-    data_distribution = DataDistribution(cols_to_analyse, ignore_outliers=False)
+    data_distribution = DataDistribution(cols_to_analyse, PATH_RESULTS_EDA_DIST, ignore_outliers=False)
     data_distribution.run(df)
     # Feature Correlation
-    feature_correlation = FeatureCorrelation(cols_to_analyse, figsize=(9, 9))
+    feature_correlation = FeatureCorrelation(cols_to_analyse, PATH_RESULTS_EDA_CORR, figsize=(9, 9))
     feature_correlation.run(df)
 
     # Get independent and dependent variables
