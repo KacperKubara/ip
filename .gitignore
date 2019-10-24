@@ -1,8 +1,9 @@
 **/__pycache__/
+**/.vscode/
 *.pyc 
 *.o 
 *.class
 **/bin/
 *.jpg
 *.png
-./data/wang_dataset/original/
+./data/wang_dataset/original
