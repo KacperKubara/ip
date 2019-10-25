@@ -50,8 +50,6 @@ models_dict = {
     "SVR": {
         "model": SVR(gamma='auto'),
         "params": {
-            "kernel": ['rbf', 'poly'],
-            "degree": [2,3,4,5],
             "gamma": np.logspace(1e-7, 1e-1, 25),
             "C": np.logspace(1e-2, 10e4, 25),
             "epsilon": np.logspace(1e-2, 1, 25)
@@ -104,7 +102,7 @@ if __name__ == "__main__":
     for model_name in models_dict.keys():
         model = models_dict[model_name]["model"]
         params = models_dict[model_name]["params"]
-        rand_search = RandomizedSearchCV(model, params, n_iter=10, n_jobs=-1,
+        rand_search = RandomizedSearchCV(model, params, n_iter=50, n_jobs=-1,
                                         cv=10, scoring=scorer, random_state=42)
         # Random Search fit
         rand_search.fit(X_train, y_train)
@@ -113,7 +111,7 @@ if __name__ == "__main__":
         # Save results data
         results[model_name] = {}
         results[model_name]["MAE"] = {mae(y_valid, y_pred)}
-        results[model_name]["Val_set_variance"] = {np.var(y_valid)}
+        results[model_name]["Var_of_y_pred"] = {np.var(y_pred)}
         print(f"Model: {model_name}")
         print(results[model_name])
 
