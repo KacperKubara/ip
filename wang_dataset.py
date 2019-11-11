@@ -1,3 +1,4 @@
+""" EDA, ML pipeline script for Wang dataset"""
 import pandas as pd
 import numpy as np
 
@@ -81,8 +82,8 @@ if __name__ == "__main__":
     feature_correlation = FeatureCorrelation(cols_to_analyse, PATH_RESULTS_EDA_CORR_WANG_DATA, 
                                             figsize=(9, 9))
     feature_correlation.run(df)
-    # Just for testing purposes - remove it later
-    df = df[:250]
+    # Decrease dataset size - just for testing purposes
+    df = df[:2000]
     print(f"DF size: {len(df.index)}")
     # Get independent and dependent variables
     X = np.asarray(df[X_names_num])
