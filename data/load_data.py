@@ -3,11 +3,6 @@ import logging
 
 import pandas as pd 
 import deepchem
-from deepchem.data import CSVLoader
-from deepchem.feat import ConvMolFeaturizer, WeaveFeaturizer, CircularFingerprint
-from deepchem.splits import ButinaSplitter, ScaffoldSplitter, MolecularWeightSplitter, MaxMinSplitter, IndexSplitter
-from deepchem.trans import NormalizationTransformer
-from deepchem.models import GraphConvModel, WeaveModel, MPNNModel
 
 from config import PATH_SOL_DATA, PATH_WANG_DATA_SMILES
 
