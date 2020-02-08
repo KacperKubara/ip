@@ -1,4 +1,5 @@
 import pandas as pd 
+import numpy as no
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
@@ -31,7 +32,7 @@ class SMILESEncoder():
             ECFP transformed from SMILES
         """
         ss_mols = \
-            X[self.col_name].apply(lambda x: Chem.MolFromSLN(x))
+            X[self.col_name].apply(lambda x: AllChem.MolFromSLN(x))
         if bit_vector == True:
             ss_ecfp = \
                 ss_mols.apply(lambda x: AllChem.GetMorganFingerprintAsBitVect(x, radius=2))
@@ -59,7 +60,7 @@ class SMILESEncoder():
             ECFP transformed from SMILES
         """
         ss_mols = \
-            X[self.col_name].apply(lambda x: Chem.MolFromSmiles(x))
+            X[self.col_name].apply(lambda x: AllChem.MolFromSmiles(x))
         if bit_vector == True:
             ss_ecfp = \
                 ss_mols.apply(lambda x: AllChem.GetMorganFingerprintAsBitVect(x, radius=2))
@@ -68,3 +69,25 @@ class SMILESEncoder():
                 ss_mols.apply(lambda x: AllChem.GetMorganFingerprint(x, radius=2))
                 
         return ss_ecfp
+
+    def sln_to_smiles(self, X: pd.DataFrame) -> pd.Series:
+        """ Converts Sybil Line Notation to SMILES
+        
+        Parameters
+        ----------
+        X : pandas DataFrame
+            Data with SMILES column
+
+        Returns
+        -------
+        pandas Series:
+            SLN transformed from SMILES
+        """
+        ss_smiles = X[self.col_name].values
+        ss_smiles = ss_smiles.ravel()
+        for i in range(len(ss_smiles)):
+            ss_smiles[i] =  AllChem.MolFromSLN(ss_smiles[i])
+            ss_smiles[i] = AllChem.MolToSmiles(ss_smiles[i])
+            
+        X[self.col_name] = ss_smiles                  
+        return X[self.col_name]

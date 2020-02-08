@@ -10,4 +10,5 @@ PATH_SOL_DATA = "C:/Users/kacpe/Desktop/Github/ip/data/solubility_challenge_trai
 PATH_RESULTS_WANG_DATA = "./results/wang_dataset"
 PATH_RESULTS_EDA_DIST_WANG_DATA = "./results/wang_dataset/eda/distribution"
 PATH_RESULTS_EDA_CORR_WANG_DATA = "./results/wang_dataset/eda/correlation"
-PATH_WANG_DATA = "C:/Users/kacpe/Desktop/Github/ip/data/wang_dataset/wang_data.csv"
+PATH_WANG_DATA = "/home/kjk1u17/ip/ip/data/wang_dataset/wang_data.csv"
+PATH_WANG_DATA_SMILES = "/home/kjk1u17/ip/ip/data/wang_dataset/wang_data_smiles.csv"
