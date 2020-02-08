@@ -1,6 +1,3 @@
-""" Encodes SMILES to Extended Connectivity Finger Prints
-or to Graphs.
-"""
 import pandas as pd 
 from rdkit import Chem
 from rdkit.Chem import AllChem
@@ -14,7 +11,7 @@ class SMILESEncoder():
     col_name: [str]
         Column name which contains SMILES string
     """
-    def __init__(self, col_name):
+    def __init__(self, col_name: str):
         self.col_name = col_name
 
     def sln_to_ecfp(self, X: pd.DataFrame, bit_vector: bool = True) -> pd.Series:
@@ -71,13 +68,3 @@ class SMILESEncoder():
                 ss_mols.apply(lambda x: AllChem.GetMorganFingerprint(x, radius=2))
                 
         return ss_ecfp
-
-    def smiles_to_graphs(self):
-        """ Transforms SMILES into Graphs representation
-        
-        Parameters
-        ----------
-        Returns
-        -------
-        """
-        pass
