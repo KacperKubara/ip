@@ -19,7 +19,7 @@ def load_wang_data() -> pd.DataFrame:
     return pd.read_csv(PATH_WANG_DATA_SMILES)
 
 def load_wang_data_gcn(featurizer='GraphConv', split='index', move_mean=True,
-                       frac_train=0.8, frac_valid=0.1, frac_test=0.1) -> pd.DataFrame:
+                       frac_train=0.8, frac_valid=0.1, frac_test=0.1):
     """ Loads Wang dataset to utilize it with GCNs from deepchem"""
     logger.info("About to load and featurize Wang dataset")
     wang_tasks = ['ClogP']
@@ -53,7 +53,8 @@ def load_wang_data_gcn(featurizer='GraphConv', split='index', move_mean=True,
       'index': deepchem.splits.IndexSplitter(),
       'random': deepchem.splits.RandomSplitter(),
       'scaffold': deepchem.splits.ScaffoldSplitter(),
-      'stratified': deepchem.splits.SingletaskStratifiedSplitter()
+      'stratified': deepchem.splits.SingletaskStratifiedSplitter(),
+      'butina': deepchem.splits.ButinaSplitter()
     }
     splitter = splitters[split]
     logger.info("About to split dataset with {} splitter.".format(split))
@@ -71,6 +72,9 @@ def load_wang_data_gcn(featurizer='GraphConv', split='index', move_mean=True,
     for transformer in transformers:
         train = transformer.transform(train)
         valid = transformer.transform(valid)
-        test = transformer.transform(test)
+        if split == 'butina':
+            test = []
+        else:
+            test = transformer.transform(test)
 
     return wang_tasks, (train, valid, test), transformers
