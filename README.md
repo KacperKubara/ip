@@ -7,6 +7,9 @@ You can reproduce the environment by simply running the command:
 There is a GCN package that requires manual installation:
 https://github.com/tkipf/gcn
 
+## Other installation tips
+Direct port 6006 from Tensorboard to your local host 16006 port so you can access it on your laptop
+`ssh -L 16006:127.0.0.1:6006 kjk1u17@uglogin.soton.ac.uk`
 ## Tensorflow GPU
 TF 2.0 and TF 1.14 Works only with CUDA 10.0. Version 10.1 doesn't work!
 
