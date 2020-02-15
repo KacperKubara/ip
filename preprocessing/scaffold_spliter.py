@@ -1,5 +1,6 @@
 import numpy as np
-from deepchem.split import Splitter
+import deepchem
+from deepchem.splits import Splitter
 from deepchem.utils import ScaffoldGenerator
 from deepchem.utils.save import log
 from rdkit import Chem
@@ -13,7 +14,7 @@ def generate_scaffold(smiles, include_chirality=False):
     return scaffold
 
 
-class ScaffoldSplitter(Splitter):
+class ScaffoldSplitterNew(Splitter):
     """
     Class for doing data splits based on the scaffold of small molecules.
     """
@@ -71,3 +72,18 @@ class ScaffoldSplitter(Splitter):
                                                    reverse=True)
         ]
         return scaffold_sets
+
+
+# Testing the class
+if __name__ == "__main__":
+    splitter = ScaffoldSplitterNew()
+    featurizer = "Weave"
+    delaney_tasks, delaney_dataset, delaney_transformers = \
+        deepchem.molnet.load_delaney(featurizer)
+    delaney_train, delaney_valid, delaney_test = delaney_dataset
+
+    scaffold_sets = splitter.generate_scaffolds(delaney_valid)
+    print(delaney_valid.ids)
+    for i, scaffold in enumerate(scaffold_sets):
+        print(f"Scaffold {i}: {scaffold}")
+        print(f"Top 3 SMILES entry: {delaney_valid.ids[scaffold[:3]]}\n")

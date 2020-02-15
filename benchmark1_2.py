@@ -1,5 +1,7 @@
 # Script implementing the 1st benchmark from my IP project
 # ToDo: Reimplement scaffold to give all clusters separetely
+import os
+import json
 import logging
 logging.getLogger().setLevel(logging.INFO)
 
@@ -10,6 +12,7 @@ from deepchem.models import ValidationCallback
 from rdkit import Chem
 
 from data import load_wang_data_gcn
+from preprocessing import ScaffoldSplitterNew
 
 # GCN models used for the benchmark
 model_dict = {
@@ -17,13 +20,24 @@ model_dict = {
     "Weave": WeaveModel,
     "ECFP": MultitaskRegressor,
 }
-# Butina clustering is only for classification
-splitter_methods = ["random", "index", "scaffold"]
-path_results = "./results/benchmark1/results_benchmark1.csv"
+splitter_methods = ["random", "scaffold"]
+path_results = "./results/benchmark1_2/results_benchmark1_2.json"
 
 
-def scaffold_metrics(scaffold_sets):
-    raise NotImplementedError
+def generate_scaffold_metrics(model, data_valid, metric, transformers):
+    results = {}
+    splitter = ScaffoldSplitterNew()
+    scaffold_sets = splitter.generate_scaffolds(data_valid)
+
+    for i, scaffold in enumerate(scaffold_sets):
+        # Taking a subset of data is possible only in this way
+        print(f"Scaffold {i} size: {len(scaffold)}")
+        data_subset = data_valid.select(indices=scaffold)
+        valid_scores = model.evaluate(data_subset, [metric], transformers)
+        results[f"Scaffold_{i}"] = {}
+        results[f"Scaffold_{i}"]["results"] = valid_scores
+        results[f"Scaffold_{i}"]["smiles"] = data_valid.ids[scaffold].tolist()
+    return results
 
 
 if __name__ == "__main__":
@@ -46,7 +60,7 @@ if __name__ == "__main__":
                 model = model_obj(len(wang_tasks),
                                   wang_train.get_data_shape()[0],
                                   batch_size=50,
-                                  model_dir=f"./results/benchmark1/tensorboard_logs/{splitter}/{model_name}",
+                                  model_dir=f"./results/benchmark1_2/tensorboard_logs/{splitter}/{model_name}",
                                   tensorboard=True,
                                   tensorboard_log_frequency=25)
 
@@ -54,11 +68,12 @@ if __name__ == "__main__":
                 model = model_obj(len(wang_tasks),
                                   batch_size=50,
                                   mode='regression',
-                                  model_dir=f"./results/benchmark1/tensorboard_logs/{splitter}/{model_name}",
+                                  model_dir=f"./results/benchmark1_2/tensorboard_logs/{splitter}/{model_name}",
                                   tensorboard=True,
                                   tensorboard_log_frequency=25)
-
-            metric = dc.metrics.Metric(dc.metrics.pearson_r2_score)
+            # Pearson metric won't be applicable for small scaffolds!
+            # For smaller size scaffolds use rmse
+            metric = dc.metrics.Metric(dc.metrics.rms_score)
             # After 25 batch updates, measure the loss
             loss_logger = ValidationCallback(wang_valid,
                                              interval=25,
@@ -67,17 +82,22 @@ if __name__ == "__main__":
             logging.info(f"Fitting the model: {model_name}")
             model.fit(wang_train, nb_epoch=10)
 
-            train_scores = model.evaluate(wang_train, [metric], wang_transformers)
-            valid_scores = model.evaluate(wang_valid, [metric], wang_transformers)
+            train_scores = model.evaluate(wang_train,
+                                          [metric],
+                                          wang_transformers)
+            valid_scores = generate_scaffold_metrics(model,
+                                                     wang_valid,
+                                                     metric,
+                                                     wang_transformers)
 
             logging.info(f"Train Scores for {model_name}")
             logging.info(train_scores)
             logging.info(f"Validation Scores for {model_name}")
             logging.info(valid_scores)
-            results[splitter][model_name] = (train_scores, valid_scores)
+            results[splitter][model_name] = {}
+            results[splitter][model_name]["train_score"] = train_scores
+            results[splitter][model_name]["valid_score"] = valid_scores
 
-            with open(path_results, 'w') as f:
-                for key in results.keys():
-                    f.write(f"{key},{results[key]}\n")
-
-    logging.info(results)
+    logging.info(f"Results has been saved to {path_results}")
+    with open(path_results, 'w') as json_f:
+        json.dump(results, json_f)

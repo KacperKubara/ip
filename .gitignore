@@ -7,3 +7,4 @@
 *.jpg
 *.png
 **/wang_dataset/original
+**/tensorboard_logs
