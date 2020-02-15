@@ -5,6 +5,7 @@ import json
 import logging
 logging.getLogger().setLevel(logging.INFO)
 
+import numpy as np
 import deepchem as dc
 from deepchem.models import GraphConvModel, WeaveModel
 from deepchem.models import MultitaskRegressor
@@ -20,7 +21,7 @@ model_dict = {
     "Weave": WeaveModel,
     "ECFP": MultitaskRegressor,
 }
-splitter_methods = ["random", "scaffold"]
+splitter_methods = ["random"]
 path_results = "./results/benchmark1_2/results_benchmark1_2.json"
 
 
@@ -36,6 +37,9 @@ def generate_scaffold_metrics(model, data_valid, metric, transformers):
         valid_scores = model.evaluate(data_subset, [metric], transformers)
         results[f"Scaffold_{i}"] = {}
         results[f"Scaffold_{i}"]["results"] = valid_scores
+        results[f"Scaffold_{i}"]["results"]["logP"] = data_subset.y.ravel().tolist()
+        results[f"Scaffold_{i}"]["results"]["logP_mean"] = np.mean(data_subset.y).ravel().tolist()
+        results[f"Scaffold_{i}"]["results"]["logP_std"] = np.std(data_subset.y).ravel().tolist()
         results[f"Scaffold_{i}"]["smiles"] = data_valid.ids[scaffold].tolist()
     return results
 
@@ -72,8 +76,8 @@ if __name__ == "__main__":
                                   tensorboard=True,
                                   tensorboard_log_frequency=25)
             # Pearson metric won't be applicable for small scaffolds!
-            # For smaller size scaffolds use rmse
-            metric = dc.metrics.Metric(dc.metrics.rms_score)
+            # For smaller size scaffolds use rms
+            metric = dc.metrics.Metric(dc.metrics.mae_score)
             # After 25 batch updates, measure the loss
             loss_logger = ValidationCallback(wang_valid,
                                              interval=25,
@@ -90,14 +94,11 @@ if __name__ == "__main__":
                                                      metric,
                                                      wang_transformers)
 
-            logging.info(f"Train Scores for {model_name}")
-            logging.info(train_scores)
-            logging.info(f"Validation Scores for {model_name}")
-            logging.info(valid_scores)
             results[splitter][model_name] = {}
             results[splitter][model_name]["train_score"] = train_scores
             results[splitter][model_name]["valid_score"] = valid_scores
 
+    logging.info(results)
     logging.info(f"Results has been saved to {path_results}")
     with open(path_results, 'w') as json_f:
         json.dump(results, json_f)
