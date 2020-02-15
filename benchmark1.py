@@ -1,4 +1,5 @@
 # Script implementing the 1st benchmark from my IP project
+# ToDo: Reimplement scaffold to give all clusters separetely
 import logging
 logging.getLogger().setLevel(logging.INFO)
 
@@ -16,8 +17,8 @@ model_dict = {
     "Weave": WeaveModel,
     "ECFP": MultitaskRegressor,
 }
-
-splitter_methods = ["scaffold", "butina", "index"]
+# Butina clustering is only for classification
+splitter_methods = ["random", "index", "scaffold"]
 path_results = "./results/benchmark1/results_benchmark1.csv"
 
 if __name__ == "__main__":
