@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/home/kjk1u17/.conda/envs/deepchem_gpu_env/bin/python",
+    "python.pythonPath": "C:\\Users\\kacpe\\Miniconda3\\envs\\deepchem\\python.exe",
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true
 }
