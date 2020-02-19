@@ -2,9 +2,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.cluster import MiniBatchKMeans
 import deepchem as dc
 
-from preprocessing import ScaffoldSplitterNew
+from preprocessing import ScaffoldSplitterNew, MolecularWeightSplitterNew
 from data import load_wang_data_gcn
 from utils import generate_scaffold_metrics
 
@@ -57,3 +58,10 @@ if __name__ == "__main__":
     plt.ylabel('Count of scaffold size')
     hist_plot.figure.savefig(path_results + "/scaffold_dist_thresholded.png")
     plt.clf()
+
+
+    # Clustering data based on the molecular weight
+    splitter_mw = MolecularWeightSplitterNew()
+    splitter_mw.split(wang_train)
+    print(f"splitter.mws: {splitter_mw.mws}")
+    print(f"splitter.sortidx: {splitter_mw.sortidx}")

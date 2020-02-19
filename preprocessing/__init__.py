@@ -1,3 +1,3 @@
 from .preprocessor import PreProcessor
 from .smiles_encoder import SMILESEncoder
-from .scaffold_spliter import ScaffoldSplitterNew
+from .custom_splitters import *
