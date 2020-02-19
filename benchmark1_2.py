@@ -1,6 +1,5 @@
 # Script implementing the 1st benchmark from my IP project
 # ToDo: Reimplement scaffold to give all clusters separetely
-import os
 import json
 import logging
 logging.getLogger().setLevel(logging.INFO)
@@ -12,8 +11,9 @@ from deepchem.models import MultitaskRegressor
 from deepchem.models import ValidationCallback
 from rdkit import Chem
 
-from data import load_wang_data_gcn
 from preprocessing import ScaffoldSplitterNew
+from data import load_wang_data_gcn
+from utils import generate_scaffold_metrics
 
 # GCN models used for the benchmark
 model_dict = {
@@ -23,25 +23,6 @@ model_dict = {
 }
 splitter_methods = ["random"]
 path_results = "./results/benchmark1_2/results_benchmark1_2.json"
-
-
-def generate_scaffold_metrics(model, data_valid, metric, transformers):
-    results = {}
-    splitter = ScaffoldSplitterNew()
-    scaffold_sets = splitter.generate_scaffolds(data_valid)
-
-    for i, scaffold in enumerate(scaffold_sets):
-        # Taking a subset of data is possible only in this way
-        print(f"Scaffold {i} size: {len(scaffold)}")
-        data_subset = data_valid.select(indices=scaffold)
-        valid_scores = model.evaluate(data_subset, [metric], transformers)
-        results[f"Scaffold_{i}"] = {}
-        results[f"Scaffold_{i}"]["results"] = valid_scores
-        results[f"Scaffold_{i}"]["results"]["logP"] = data_subset.y.ravel().tolist()
-        results[f"Scaffold_{i}"]["results"]["logP_mean"] = np.mean(data_subset.y).ravel().tolist()
-        results[f"Scaffold_{i}"]["results"]["logP_std"] = np.std(data_subset.y).ravel().tolist()
-        results[f"Scaffold_{i}"]["smiles"] = data_valid.ids[scaffold].tolist()
-    return results
 
 
 if __name__ == "__main__":
