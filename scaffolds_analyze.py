@@ -20,8 +20,11 @@ if __name__ == "__main__":
     wang_train, wang_valid, wang_test = wang_dataset
     
     for name, splitter in splitter_dict.items():
+        if name == "Butina":
+            scaffold_sets = splitter.generate_scaffolds(wang_train, cutoff=0.8)
+        else:
+            scaffold_sets = splitter.generate_scaffolds(wang_train)
 
-        scaffold_sets = splitter.generate_scaffolds(wang_train)
         scaffold_dict = {k: v for k, v in enumerate(scaffold_sets)}
         scaffold_dict_sum = {k: len(v) for k, v in enumerate(scaffold_sets)}
         scaffold_dict_sum = {k: v for k, v in
@@ -69,7 +72,7 @@ if __name__ == "__main__":
     print(f"splitter.mws: {splitter_mw.mws}")
     print(f"splitter.sortidx: {splitter_mw.sortidx}")
 
-    kmeans = MiniBatchKMeans(n_clusters=5,
+    kmeans = MiniBatchKMeans(n_clusters=3,
                                 random_state=44,
                                 batch_size=6,
                                 max_iter=10)
@@ -77,3 +80,15 @@ if __name__ == "__main__":
     mws = np.array(splitter_mw.mws).reshape(-1, 1)
     visualizer.fit(mws)
     visualizer.show(outpath=path_results + "/mws_elbow.png")
+
+    model_dict = {
+        "n_clusters": 3, 
+        "random_state": 44, 
+        "batch_size": 6, 
+        "max_iter": 10
+        }
+    scaffold_sets = splitter_mw.generate_scaffolds(MiniBatchKMeans, model_dict)
+    print(scaffold_sets)
+    print(len(scaffold_sets))
+    for arr in scaffold_sets:
+        print(f"Lengthof the array: {len(arr)}")

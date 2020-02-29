@@ -3,7 +3,9 @@ import logging
 import json
 
 import numpy as np
+import pandas as pd
 from rdkit import Chem
+import seaborn as sns
 
 from preprocessing import ScaffoldSplitterNew
 
@@ -46,6 +48,42 @@ def sort_benchmark1_results(path_read: str, path_write: str):
         json.dump(results_dict, json_f)
 
 
+def visualize_benchmark1_3_results(path_read: str, path_write: str):
+    results_dict = {}
+    with open(path_read, 'r') as json_f:
+        results_dict = json.load(json_f)
+
+    data_plot = {}
+    for model_name, dict1 in results_dict.items():
+        data_plot[model_name] = {}
+        for scaffold_name, dict2 in dict1.items():
+            data_plot[model_name][scaffold_name] = {}
+            arr_temp = []
+            for fold_name, dict3 in dict2.items():
+                arr_temp.append(dict3["valid score"]["mae_score"])
+            data_plot[model_name][scaffold_name]["valid_mae"] = arr_temp
+
+    # Save the data for preliminary insights
+    with open(path_write, 'w') as json_f:
+        json.dump(data_plot, json_f)
+
+    df_converter = {
+        "model": [], 
+        "scaffold": [],
+        "mae": [],
+        }
+
+    for model_name, dict1 in data_plot.items():
+        for scaffold, dict2 in dict1.items():
+            for el in dict2["valid_mae"]:
+                df_converter["model"].append(model_name)
+                df_converter["scaffold"].append(scaffold)
+                df_converter["mae"].append(el)
+
+    df = pd.DataFrame(df_converter)
+    ax = sns.boxplot(x="model", y="mae", hue="scaffold", data=df_converter)
+    ax.figure.savefig(path_write[:-4] + "boxplots.png")
+
 def generate_scaffold_metrics(model, data_valid, metric, transformers):
     results = {}
     splitter = ScaffoldSplitterNew()
@@ -72,5 +110,10 @@ def generate_scaffold_metrics(model, data_valid, metric, transformers):
     return results
 
 if __name__ == "__main__":
+    """
     sort_benchmark1_results("./results/benchmark1_2/results_benchmark1_2.json",
                             "./results/benchmark1_2/results_benchmark1_2_sorted.json")
+    """
+
+    visualize_benchmark1_3_results("./results/benchmark1_3/results_benchmark1_3.json",
+                                   "./results/benchmark1_3/results_benchmark1_3_for_plots.json")

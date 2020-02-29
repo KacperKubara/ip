@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.cluster import MiniBatchKMeans
 import deepchem
 from deepchem.splits import Splitter
 from deepchem.utils import ScaffoldGenerator
@@ -80,12 +81,12 @@ class MolecularWeightSplitterNew(Splitter):
     Class for doing data splits by molecular weight.
     """
     def split(self,
-                dataset,
-                seed=None,
-                frac_train=.8,
-                frac_valid=.1,
-                frac_test=.1,
-                log_every_n=None):
+            dataset,
+            seed=None,
+            frac_train=.8,
+            frac_valid=.1,
+            frac_test=.1,
+            log_every_n=None):
         """
         Splits internal compounds into train/validation/test using the MW calculated
         by SMILES string.
@@ -111,6 +112,16 @@ class MolecularWeightSplitterNew(Splitter):
         return (self.sortidx[:train_cutoff], self.sortidx[train_cutoff:valid_cutoff],
                 self.sortidx[valid_cutoff:])
 
+    def generate_scaffolds(self, sklearn_model, model_dict):
+        model = sklearn_model(**model_dict)
+        labels = model.fit_predict(self.mws.reshape(-1, 1))
+        labels_ids = np.unique(labels)
+        sets_id = []
+
+        for id in labels_ids:
+            sets_id.append(self.sortidx[labels == id])
+        
+        return tuple(sets_id)
 
 def ClusterFps(fps, cutoff=0.2):
     # (ytz): this is directly copypasta'd from Greg Landrum's clustering example.
