@@ -196,6 +196,7 @@ class ButinaSplitterNew(Splitter):
 
         scaffold_sets = ClusterFps(fps, cutoff=cutoff)
         scaffold_sets = sorted(scaffold_sets, key=lambda x: -len(x))
+        scaffold_sets = [list(sfd) for sfd in scaffold_sets]
         return scaffold_sets
 
 

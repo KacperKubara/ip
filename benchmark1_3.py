@@ -1,7 +1,7 @@
 # Do the Scaffold Split
 # Take the k (2) biggest scaffolds
 # Generate 10 different folds with RandomSplitter
-# Get the scores with the uncertainty range 
+# Get the scores with the uncertainty range
 import json
 import logging
 logging.getLogger().setLevel(logging.INFO)
@@ -48,9 +48,9 @@ def get_model(model_name: str):
                           tensorboard_log_frequency=25)
     return model
 
-splitter_dict ={
-    "MolecularWeight": MolecularWeightSplitterNew(),
+splitter_dict = {
     "Butina": ButinaSplitterNew(),
+    "MolecularWeight": MolecularWeightSplitterNew(),
     "Scaffold": ScaffoldSplitterNew(), 
     }
 
@@ -59,26 +59,30 @@ if __name__ == "__main__":
     results = {}
 
     for splitter_name, splitter in splitter_dict.items():
+        logging.info(f"Generating scaffolds with {splitter_name}")
         results[splitter_name] = {}
         for model_name, model_obj in model_dict.items():
+            logging.info(f"Using {model_name} as a model")
             results[splitter_name][model_name] = {}
             featurizer = model_name
             wang_tasks, wang_dataset, wang_transformers =\
                 load_wang_data_gcn(featurizer, split='index', frac_train=0.99,
-                                frac_test=0.005, frac_valid=0.005)
+                                   frac_test=0.005, frac_valid=0.005)
             wang_train, wang_valid, wang_test = wang_dataset
             metric = dc.metrics.Metric(dc.metrics.mae_score)
             splitter_rand = RandomSplitter() # For CV
 
-            # Get two biggest scaffolds
+            # Get the biggest scaffolds
             if splitter_name == "Butina":
                 scaffold_sets = splitter.generate_scaffolds(wang_train, cutoff=0.8)
             if splitter_name == "MolecularWeight":
                 splitter.split(wang_train)
                 scaffold_sets = splitter.generate_scaffolds(MiniBatchKMeans, kmeans_dict)
-            else:
+            if splitter_name == "Scaffold":
                 scaffold_sets = splitter.generate_scaffolds(wang_train)
             logging.info(f"Scaffolds sets size: {len(scaffold_sets)}")
+            logging.info(f"Scaffolds length: {[len(sfd) for sfd in scaffold_sets]}")
+            logging.info(f"Raw scaffolds: {scaffold_sets}")
             scaffold_sets_filt = [sfd for sfd in scaffold_sets if len(sfd) >= 100]
         
             for sfd_filt in scaffold_sets_filt:
@@ -109,6 +113,6 @@ if __name__ == "__main__":
                     del model
 
             # Update results file after each model
-            with open(path_results + splitter_name + ".json", 'w') as outfile:    
+            with open(path_base + ".json", 'w') as outfile:    
                 json.dump(results, outfile)
                 logging.info("Succesful save to json file")

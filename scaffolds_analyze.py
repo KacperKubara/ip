@@ -11,11 +11,14 @@ from data import load_wang_data_gcn
 from utils import generate_scaffold_metrics
 
 path_results = "/home/kjk1u17/ip/ip/results/wang_dataset"
-splitter_dict ={"Scaffold": ScaffoldSplitterNew(), "Butina": ButinaSplitterNew()}
+splitter_dict ={
+    "Butina": ButinaSplitterNew(),
+    "Scaffold": ScaffoldSplitterNew(), 
+    }
 
 if __name__ == "__main__":
     wang_tasks, wang_dataset, wang_transformers =\
-        load_wang_data_gcn(split='index', frac_train=0.99,
+        load_wang_data_gcn(featurizer="GraphConv", split='index', frac_train=0.99,
                            frac_test=0.005, frac_valid=0.005)
     wang_train, wang_valid, wang_test = wang_dataset
     
@@ -33,6 +36,8 @@ if __name__ == "__main__":
                             }
         scaffold_sum = [v for v in scaffold_dict_sum.values()]
         scaffold_unique = list(set([v for v in scaffold_dict_sum.values()]))
+        print(f"{name}: Raw Scaffolds: {scaffold_sets}")
+        print(f"{name}: Raw Scaffolds Length: {[len(sfd) for sfd in scaffold_sets]}")
         print(f"{name}: Scaffolds sorted and unique: {scaffold_unique}")
         scaffold_unique.sort(reverse=True)
 
