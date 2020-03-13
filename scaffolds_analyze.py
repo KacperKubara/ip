@@ -1,5 +1,6 @@
 # Script to analyze statistical properties of the scaffold
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.cluster import MiniBatchKMeans
@@ -80,11 +81,29 @@ if __name__ == "__main__":
     kmeans = MiniBatchKMeans(n_clusters=3,
                                 random_state=44,
                                 batch_size=6,
-                                max_iter=10)
+                                max_iter=100)
     visualizer = KElbowVisualizer(kmeans, k=(1,12))
     mws = np.array(splitter_mw.mws).reshape(-1, 1)
     visualizer.fit(mws)
     visualizer.show(outpath=path_results + "/mws_elbow.png")
+    plt.clf()
+
+    # Visualize the weight clusters
+    kmeans = MiniBatchKMeans(n_clusters=3,
+                            random_state=44,
+                            batch_size=6,
+                            max_iter=100)
+    labels = kmeans.fit_predict(mws).flatten()
+    df = pd.DataFrame({"mws": mws.flatten(), "labels": labels})
+    hist_plot = sns.distplot(df[labels==0]["mws"], color="red", kde=False, label="Heavy")
+    sns.distplot(df[labels==2]["mws"], color="olive", ax=hist_plot, kde=False, label="Medium")
+    sns.distplot(df[labels==1]["mws"], color="skyblue", ax=hist_plot, kde=False, label="Light")
+    plt.title(f'Clustered distribution of molecular weights with MiniBatchKMeans, n_clusters=3')
+    plt.xlabel('Molecular Weights')
+    plt.ylabel('Count')
+    plt.legend()
+    hist_plot.figure.savefig(path_results + f"/MolecularWeightDist_separate.png")
+    plt.clf()
 
     model_dict = {
         "n_clusters": 3, 
@@ -96,4 +115,4 @@ if __name__ == "__main__":
     print(scaffold_sets)
     print(len(scaffold_sets))
     for arr in scaffold_sets:
-        print(f"Lengthof the array: {len(arr)}")
+        print(f"Length of the array: {len(arr)}")

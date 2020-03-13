@@ -1,6 +1,7 @@
 """ Utility functions for general, package-wide purposes"""
 import logging
 import json
+from copy import deepcopy
 
 import numpy as np
 import pandas as pd
@@ -51,51 +52,55 @@ def sort_benchmark1_results(path_read: str, path_write: str):
         json.dump(results_dict, json_f)
 
 
-def visualize_benchmark1_3_results(path_read: str = None, path_write: str = None, 
-                                 path_converted: str = None):
-    if path_converted is None:
-        results_dict = {}
-        with open(path_read, 'r') as json_f:
-            results_dict = json.load(json_f)
+def visualize_benchmark1_3_results(path_read: str = None, path_write: str = None):
+    results_dict = {}
+    with open(path_read, 'r') as json_f:
+        results_dict = json.load(json_f)
 
-        data_plot = {}
-
-        for model_name, dict1 in results_dict.items():
-            data_plot[model_name] = {}
+    data_plot = {}
+    for splitter_name, dict0 in results_dict.items():
+        data_plot[splitter_name] = {}
+        for model_name, dict1 in dict0.items():
+            data_plot[splitter_name][model_name] = {}
             for scaffold_name, dict2 in dict1.items():
-                data_plot[model_name][scaffold_name] = {}
+                data_plot[splitter_name][model_name][scaffold_name] = {}
                 arr_temp = []
                 for fold_name, dict3 in dict2.items():
                     arr_temp.append(dict3["valid score"]["mae_score"])
-                data_plot[model_name][scaffold_name]["valid_mae"] = arr_temp
+                data_plot[splitter_name][model_name][scaffold_name]["valid_mae"] = arr_temp
 
-        # Save the data for preliminary insights
-        with open(path_write, 'w') as json_f:
-            json.dump(data_plot, json_f)
+    # Save the data for preliminary insights
+    with open(path_write, 'w') as json_f:
+        json.dump(data_plot, json_f)
 
-    else: 
-        with open(path_converted, 'r') as json_f:
-            data_plot = json.load(json_f)
-    df_converter = {
+    df_converter_temp = {
         "model": [], 
         "scaffold": [],
-        "mae": [],
+        "mae": []
         }
+    df_converter = {}
+    for splitter_name, dict0 in data_plot.items():
+        df_converter_temp["model"] = []
+        df_converter_temp["scaffold"] = []
+        df_converter_temp["mae"] = []
+        for model_name, dict1 in dict0.items():
+            for scaffold, dict2 in dict1.items():
+                for el in dict2["valid_mae"]:
+                    df_converter_temp["model"].append(model_name)
+                    df_converter_temp["scaffold"].append(scaffold)
+                    df_converter_temp["mae"].append(el)
+        df_converter[splitter_name] = deepcopy(df_converter_temp)
 
-    for model_name, dict1 in data_plot.items():
-        for scaffold, dict2 in dict1.items():
-            for el in dict2["valid_mae"]:
-                df_converter["model"].append(model_name)
-                df_converter["scaffold"].append(scaffold)
-                df_converter["mae"].append(el)
-
-    df = pd.DataFrame(df_converter)
-    ax = sns.boxplot(x="model", y="mae", hue="scaffold", 
-                     data=df_converter, palette="Set3")
-    ax.set(xlabel='Models', ylabel='MAE')
-    ax.set_title('MAE score obtained by different models on scaffolded data')
-    ax.figure.savefig(path_write[:-4] + "boxplots.png")
-    plt.clf()
+    for splitter_name, df_converter_temp in df_converter.items():
+        print(splitter_name)
+        df = pd.DataFrame(df_converter_temp)
+        print(df["scaffold"].unique())
+        ax = sns.boxplot(x="model", y="mae", hue="scaffold", 
+                        data=df_converter_temp, palette="Set3")
+        ax.set(xlabel='Models', ylabel='MAE')
+        ax.set_title(f'MAE with different models on scaffolded data ({splitter_name})')
+        ax.figure.savefig(path_write[:-4] + f"_{splitter_name}_boxplots.png")
+        plt.clf()
 
 def generate_scaffold_metrics(model, data_valid, metric, transformers):
     results = {}
@@ -141,12 +146,10 @@ def generate_scaffold_metrics(model, data_valid, metric, transformers):
     return results
 
 if __name__ == "__main__":
-    
+    """    
     sort_benchmark1_results("./results/benchmark1_2/results_benchmark1_2.json",
                             "./results/benchmark1_2/results_benchmark1_2_sorted.json")
     """
-    visualize_benchmark1_3_results("./results/benchmark1_3/results_benchmark1_3_molecularweight.json",
-                                   "./results/benchmark1_3/results_benchmark1_3_molecularweight_for_plots.json")
-    visualize_benchmark1_3_results(path_write="./results/benchmark1_3/results_benchmark1_3_scaffold_for_plots.json",
-                                    path_converted="/home/kjk1u17/ip/ip/results/benchmark1_3/results_benchmark1_3_for_plots.json")
-    """
+
+    visualize_benchmark1_3_results("./results/benchmark1_3/results_benchmark1_3_.json",
+                                   "./results/benchmark1_3/results_benchmark1_3_for_plots.json")

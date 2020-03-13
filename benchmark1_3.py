@@ -36,22 +36,19 @@ def get_model(model_name: str):
         model = model_obj(len(wang_tasks),
                           wang_train.get_data_shape()[0],
                           batch_size=50,
-                          model_dir=f"./results/benchmark1_3/tensorboard_logs/{splitter}/{model_name}",
-                          tensorboard=True,
                           tensorboard_log_frequency=25)
     else:
         model = model_obj(len(wang_tasks),
                           batch_size=50,
                           mode='regression',
-                          model_dir=f"./results/benchmark1_3/tensorboard_logs/{splitter}/{model_name}",
-                          tensorboard=True,
                           tensorboard_log_frequency=25)
     return model
 
 splitter_dict = {
-    "Butina": ButinaSplitterNew(),
+    "Scaffold": ScaffoldSplitterNew(),
     "MolecularWeight": MolecularWeightSplitterNew(),
-    "Scaffold": ScaffoldSplitterNew(), 
+    "Random": RandomSplitter(),
+    "Butina": ButinaSplitterNew(),
     }
 
 
@@ -80,6 +77,10 @@ if __name__ == "__main__":
                 scaffold_sets = splitter.generate_scaffolds(MiniBatchKMeans, kmeans_dict)
             if splitter_name == "Scaffold":
                 scaffold_sets = splitter.generate_scaffolds(wang_train)
+            if splitter_name == "Random":
+                scaffold_sets = splitter.split(wang_train, frac_train=0.33,
+                                               frac_valid=0.33, frac_test=0.34)
+
             logging.info(f"Scaffolds sets size: {len(scaffold_sets)}")
             logging.info(f"Scaffolds length: {[len(sfd) for sfd in scaffold_sets]}")
             logging.info(f"Raw scaffolds: {scaffold_sets}")
