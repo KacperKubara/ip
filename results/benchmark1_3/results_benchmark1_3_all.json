@@ -2482,5 +2482,751 @@
                 }
             }
         }
+    },
+    "Scaffold": {
+        "GraphConv": {
+            "scaffold_843": {
+                "fold_0": {
+                    "train score": {
+                        "mae_score": 0.24902784209801854
+                    },
+                    "valid score": {
+                        "mae_score": 0.41431084248308686
+                    }
+                },
+                "fold_1": {
+                    "train score": {
+                        "mae_score": 0.26662453751302845
+                    },
+                    "valid score": {
+                        "mae_score": 0.48528302144331564
+                    }
+                },
+                "fold_2": {
+                    "train score": {
+                        "mae_score": 0.1801002626381393
+                    },
+                    "valid score": {
+                        "mae_score": 0.44328017393951913
+                    }
+                },
+                "fold_3": {
+                    "train score": {
+                        "mae_score": 0.23778427699292806
+                    },
+                    "valid score": {
+                        "mae_score": 0.42169564098829987
+                    }
+                },
+                "fold_4": {
+                    "train score": {
+                        "mae_score": 0.22046365612123964
+                    },
+                    "valid score": {
+                        "mae_score": 0.355847957010425
+                    }
+                },
+                "fold_5": {
+                    "train score": {
+                        "mae_score": 0.20449015315624336
+                    },
+                    "valid score": {
+                        "mae_score": 0.377020206072162
+                    }
+                },
+                "fold_6": {
+                    "train score": {
+                        "mae_score": 0.27144017821836924
+                    },
+                    "valid score": {
+                        "mae_score": 0.3579924938438192
+                    }
+                },
+                "fold_7": {
+                    "train score": {
+                        "mae_score": 0.3073118827993413
+                    },
+                    "valid score": {
+                        "mae_score": 0.43139015770450484
+                    }
+                },
+                "fold_8": {
+                    "train score": {
+                        "mae_score": 0.3140514559762564
+                    },
+                    "valid score": {
+                        "mae_score": 0.42070453469031543
+                    }
+                },
+                "fold_9": {
+                    "train score": {
+                        "mae_score": 0.2965934138001611
+                    },
+                    "valid score": {
+                        "mae_score": 0.49188011100758094
+                    }
+                }
+            },
+            "scaffold_824": {
+                "fold_0": {
+                    "train score": {
+                        "mae_score": 0.27306322596029264
+                    },
+                    "valid score": {
+                        "mae_score": 0.35654344225191575
+                    }
+                },
+                "fold_1": {
+                    "train score": {
+                        "mae_score": 0.2898384722852502
+                    },
+                    "valid score": {
+                        "mae_score": 0.4240241582729959
+                    }
+                },
+                "fold_2": {
+                    "train score": {
+                        "mae_score": 0.3289963786086605
+                    },
+                    "valid score": {
+                        "mae_score": 0.4622823022003599
+                    }
+                },
+                "fold_3": {
+                    "train score": {
+                        "mae_score": 0.40146194681210107
+                    },
+                    "valid score": {
+                        "mae_score": 0.5392693825258134
+                    }
+                },
+                "fold_4": {
+                    "train score": {
+                        "mae_score": 0.2898310243979653
+                    },
+                    "valid score": {
+                        "mae_score": 0.4608096110598209
+                    }
+                },
+                "fold_5": {
+                    "train score": {
+                        "mae_score": 0.26348659742226
+                    },
+                    "valid score": {
+                        "mae_score": 0.4217376914355702
+                    }
+                },
+                "fold_6": {
+                    "train score": {
+                        "mae_score": 0.40077509680483003
+                    },
+                    "valid score": {
+                        "mae_score": 0.5387299752504832
+                    }
+                },
+                "fold_7": {
+                    "train score": {
+                        "mae_score": 0.4459933612693331
+                    },
+                    "valid score": {
+                        "mae_score": 0.6047810115164154
+                    }
+                },
+                "fold_8": {
+                    "train score": {
+                        "mae_score": 0.2573795062064284
+                    },
+                    "valid score": {
+                        "mae_score": 0.4209873813039301
+                    }
+                },
+                "fold_9": {
+                    "train score": {
+                        "mae_score": 0.2586994161209619
+                    },
+                    "valid score": {
+                        "mae_score": 0.30241413315323307
+                    }
+                }
+            },
+            "scaffold_145": {
+                "fold_0": {
+                    "train score": {
+                        "mae_score": 0.18490231349494524
+                    },
+                    "valid score": {
+                        "mae_score": 0.21065110533355128
+                    }
+                },
+                "fold_1": {
+                    "train score": {
+                        "mae_score": 0.29655531450422856
+                    },
+                    "valid score": {
+                        "mae_score": 0.3185210764773508
+                    }
+                },
+                "fold_2": {
+                    "train score": {
+                        "mae_score": 0.3439706409430465
+                    },
+                    "valid score": {
+                        "mae_score": 0.21804691331329207
+                    }
+                },
+                "fold_3": {
+                    "train score": {
+                        "mae_score": 0.344030319075741
+                    },
+                    "valid score": {
+                        "mae_score": 0.632073476682107
+                    }
+                },
+                "fold_4": {
+                    "train score": {
+                        "mae_score": 0.23628506950827438
+                    },
+                    "valid score": {
+                        "mae_score": 0.2319767191579977
+                    }
+                },
+                "fold_5": {
+                    "train score": {
+                        "mae_score": 0.2041515168103005
+                    },
+                    "valid score": {
+                        "mae_score": 0.30773494966305537
+                    }
+                },
+                "fold_6": {
+                    "train score": {
+                        "mae_score": 0.3057294356185868
+                    },
+                    "valid score": {
+                        "mae_score": 0.2958738807061471
+                    }
+                },
+                "fold_7": {
+                    "train score": {
+                        "mae_score": 0.15868471877042323
+                    },
+                    "valid score": {
+                        "mae_score": 0.371452158022586
+                    }
+                },
+                "fold_8": {
+                    "train score": {
+                        "mae_score": 0.3952622372516175
+                    },
+                    "valid score": {
+                        "mae_score": 0.2429514093079921
+                    }
+                },
+                "fold_9": {
+                    "train score": {
+                        "mae_score": 0.3583356818841994
+                    },
+                    "valid score": {
+                        "mae_score": 0.15700774675699644
+                    }
+                }
+            }
+        },
+        "Weave": {
+            "scaffold_843": {
+                "fold_0": {
+                    "train score": {
+                        "mae_score": 0.37104959143164273
+                    },
+                    "valid score": {
+                        "mae_score": 0.4876949703790484
+                    }
+                },
+                "fold_1": {
+                    "train score": {
+                        "mae_score": 0.5610919409531795
+                    },
+                    "valid score": {
+                        "mae_score": 0.607134294938887
+                    }
+                },
+                "fold_2": {
+                    "train score": {
+                        "mae_score": 0.4485748672624074
+                    },
+                    "valid score": {
+                        "mae_score": 0.5321360566867708
+                    }
+                },
+                "fold_3": {
+                    "train score": {
+                        "mae_score": 0.434558830608199
+                    },
+                    "valid score": {
+                        "mae_score": 0.5161931846970411
+                    }
+                },
+                "fold_4": {
+                    "train score": {
+                        "mae_score": 0.4989354808334508
+                    },
+                    "valid score": {
+                        "mae_score": 0.7289802924956703
+                    }
+                },
+                "fold_5": {
+                    "train score": {
+                        "mae_score": 0.5453817786678048
+                    },
+                    "valid score": {
+                        "mae_score": 0.6254916549288333
+                    }
+                },
+                "fold_6": {
+                    "train score": {
+                        "mae_score": 0.31382984834720296
+                    },
+                    "valid score": {
+                        "mae_score": 0.3596485149904659
+                    }
+                },
+                "fold_7": {
+                    "train score": {
+                        "mae_score": 0.32267109066084076
+                    },
+                    "valid score": {
+                        "mae_score": 0.4617204093597781
+                    }
+                },
+                "fold_8": {
+                    "train score": {
+                        "mae_score": 0.7305994232278956
+                    },
+                    "valid score": {
+                        "mae_score": 0.733683905550461
+                    }
+                },
+                "fold_9": {
+                    "train score": {
+                        "mae_score": 0.3374585060242098
+                    },
+                    "valid score": {
+                        "mae_score": 0.4884633088935778
+                    }
+                }
+            },
+            "scaffold_824": {
+                "fold_0": {
+                    "train score": {
+                        "mae_score": 0.44633035676187655
+                    },
+                    "valid score": {
+                        "mae_score": 0.5540956434035235
+                    }
+                },
+                "fold_1": {
+                    "train score": {
+                        "mae_score": 0.4495544059581004
+                    },
+                    "valid score": {
+                        "mae_score": 0.406937574631806
+                    }
+                },
+                "fold_2": {
+                    "train score": {
+                        "mae_score": 0.4535404158090591
+                    },
+                    "valid score": {
+                        "mae_score": 0.5195298810212742
+                    }
+                },
+                "fold_3": {
+                    "train score": {
+                        "mae_score": 0.4881303121094679
+                    },
+                    "valid score": {
+                        "mae_score": 0.51024509761182
+                    }
+                },
+                "fold_4": {
+                    "train score": {
+                        "mae_score": 0.36200420210798195
+                    },
+                    "valid score": {
+                        "mae_score": 0.4202215779606913
+                    }
+                },
+                "fold_5": {
+                    "train score": {
+                        "mae_score": 0.413084479414719
+                    },
+                    "valid score": {
+                        "mae_score": 0.43214620754487865
+                    }
+                },
+                "fold_6": {
+                    "train score": {
+                        "mae_score": 0.4146147719252794
+                    },
+                    "valid score": {
+                        "mae_score": 0.5102680244528198
+                    }
+                },
+                "fold_7": {
+                    "train score": {
+                        "mae_score": 0.530621532820964
+                    },
+                    "valid score": {
+                        "mae_score": 0.6809332640606427
+                    }
+                },
+                "fold_8": {
+                    "train score": {
+                        "mae_score": 0.49893263743441785
+                    },
+                    "valid score": {
+                        "mae_score": 0.6413170718153542
+                    }
+                },
+                "fold_9": {
+                    "train score": {
+                        "mae_score": 0.5529542633089248
+                    },
+                    "valid score": {
+                        "mae_score": 0.5568231320053589
+                    }
+                }
+            },
+            "scaffold_145": {
+                "fold_0": {
+                    "train score": {
+                        "mae_score": 0.24787750292966432
+                    },
+                    "valid score": {
+                        "mae_score": 0.2018980584633497
+                    }
+                },
+                "fold_1": {
+                    "train score": {
+                        "mae_score": 0.15005669793309426
+                    },
+                    "valid score": {
+                        "mae_score": 0.14793488677215016
+                    }
+                },
+                "fold_2": {
+                    "train score": {
+                        "mae_score": 0.21549269920733935
+                    },
+                    "valid score": {
+                        "mae_score": 0.1757199943373869
+                    }
+                },
+                "fold_3": {
+                    "train score": {
+                        "mae_score": 0.22209839474245757
+                    },
+                    "valid score": {
+                        "mae_score": 0.2758111936003934
+                    }
+                },
+                "fold_4": {
+                    "train score": {
+                        "mae_score": 0.27007190844603296
+                    },
+                    "valid score": {
+                        "mae_score": 0.16319743799396128
+                    }
+                },
+                "fold_5": {
+                    "train score": {
+                        "mae_score": 0.2548913865581455
+                    },
+                    "valid score": {
+                        "mae_score": 0.19293883677315815
+                    }
+                },
+                "fold_6": {
+                    "train score": {
+                        "mae_score": 0.2655465729353834
+                    },
+                    "valid score": {
+                        "mae_score": 0.16819639268874403
+                    }
+                },
+                "fold_7": {
+                    "train score": {
+                        "mae_score": 0.18837320622646112
+                    },
+                    "valid score": {
+                        "mae_score": 0.24599462789114873
+                    }
+                },
+                "fold_8": {
+                    "train score": {
+                        "mae_score": 0.2999031992027883
+                    },
+                    "valid score": {
+                        "mae_score": 0.4020350700362569
+                    }
+                },
+                "fold_9": {
+                    "train score": {
+                        "mae_score": 0.18280939271360996
+                    },
+                    "valid score": {
+                        "mae_score": 0.2353002744152734
+                    }
+                }
+            }
+        },
+        "ECFP": {
+            "scaffold_843": {
+                "fold_0": {
+                    "train score": {
+                        "mae_score": 0.5226821193018278
+                    },
+                    "valid score": {
+                        "mae_score": 0.7056503766656922
+                    }
+                },
+                "fold_1": {
+                    "train score": {
+                        "mae_score": 0.4512153093456863
+                    },
+                    "valid score": {
+                        "mae_score": 0.6810295249195887
+                    }
+                },
+                "fold_2": {
+                    "train score": {
+                        "mae_score": 0.6193320470242227
+                    },
+                    "valid score": {
+                        "mae_score": 0.7329136561590124
+                    }
+                },
+                "fold_3": {
+                    "train score": {
+                        "mae_score": 0.4661738222022697
+                    },
+                    "valid score": {
+                        "mae_score": 0.6671960902731604
+                    }
+                },
+                "fold_4": {
+                    "train score": {
+                        "mae_score": 0.5092345063347329
+                    },
+                    "valid score": {
+                        "mae_score": 0.6401556471430477
+                    }
+                },
+                "fold_5": {
+                    "train score": {
+                        "mae_score": 0.4680843087370174
+                    },
+                    "valid score": {
+                        "mae_score": 0.5927522799786206
+                    }
+                },
+                "fold_6": {
+                    "train score": {
+                        "mae_score": 0.48828774780657536
+                    },
+                    "valid score": {
+                        "mae_score": 0.7331157900907871
+                    }
+                },
+                "fold_7": {
+                    "train score": {
+                        "mae_score": 0.5346064216026384
+                    },
+                    "valid score": {
+                        "mae_score": 0.7603435115406708
+                    }
+                },
+                "fold_8": {
+                    "train score": {
+                        "mae_score": 0.5087818965375202
+                    },
+                    "valid score": {
+                        "mae_score": 0.7002306056611323
+                    }
+                },
+                "fold_9": {
+                    "train score": {
+                        "mae_score": 0.6436434252230692
+                    },
+                    "valid score": {
+                        "mae_score": 0.7069733752233232
+                    }
+                }
+            },
+            "scaffold_824": {
+                "fold_0": {
+                    "train score": {
+                        "mae_score": 0.3187131910159003
+                    },
+                    "valid score": {
+                        "mae_score": 0.5926698789252559
+                    }
+                },
+                "fold_1": {
+                    "train score": {
+                        "mae_score": 0.3748356466597109
+                    },
+                    "valid score": {
+                        "mae_score": 0.5201757369083576
+                    }
+                },
+                "fold_2": {
+                    "train score": {
+                        "mae_score": 0.3436213004352207
+                    },
+                    "valid score": {
+                        "mae_score": 0.43539867048574993
+                    }
+                },
+                "fold_3": {
+                    "train score": {
+                        "mae_score": 0.328837268790233
+                    },
+                    "valid score": {
+                        "mae_score": 0.4665479116707511
+                    }
+                },
+                "fold_4": {
+                    "train score": {
+                        "mae_score": 0.35375089493522327
+                    },
+                    "valid score": {
+                        "mae_score": 0.4312077242429122
+                    }
+                },
+                "fold_5": {
+                    "train score": {
+                        "mae_score": 0.3748882317465102
+                    },
+                    "valid score": {
+                        "mae_score": 0.6088189870015293
+                    }
+                },
+                "fold_6": {
+                    "train score": {
+                        "mae_score": 0.4118412483642484
+                    },
+                    "valid score": {
+                        "mae_score": 0.6035588556474892
+                    }
+                },
+                "fold_7": {
+                    "train score": {
+                        "mae_score": 0.37674281743406596
+                    },
+                    "valid score": {
+                        "mae_score": 0.5517780294441587
+                    }
+                },
+                "fold_8": {
+                    "train score": {
+                        "mae_score": 0.34901229362959624
+                    },
+                    "valid score": {
+                        "mae_score": 0.4312255051775198
+                    }
+                },
+                "fold_9": {
+                    "train score": {
+                        "mae_score": 0.40989068046531524
+                    },
+                    "valid score": {
+                        "mae_score": 0.4407739515368126
+                    }
+                }
+            },
+            "scaffold_145": {
+                "fold_0": {
+                    "train score": {
+                        "mae_score": 0.3412371834614504
+                    },
+                    "valid score": {
+                        "mae_score": 0.4566479486282183
+                    }
+                },
+                "fold_1": {
+                    "train score": {
+                        "mae_score": 0.7795574535151377
+                    },
+                    "valid score": {
+                        "mae_score": 0.5968245672572332
+                    }
+                },
+                "fold_2": {
+                    "train score": {
+                        "mae_score": 0.2550237767612866
+                    },
+                    "valid score": {
+                        "mae_score": 0.30644021220690953
+                    }
+                },
+                "fold_3": {
+                    "train score": {
+                        "mae_score": 0.26056230819795123
+                    },
+                    "valid score": {
+                        "mae_score": 0.3601047322056881
+                    }
+                },
+                "fold_4": {
+                    "train score": {
+                        "mae_score": 0.30418536219131553
+                    },
+                    "valid score": {
+                        "mae_score": 0.5529202495692181
+                    }
+                },
+                "fold_5": {
+                    "train score": {
+                        "mae_score": 0.30795557927837336
+                    },
+                    "valid score": {
+                        "mae_score": 0.333135872481645
+                    }
+                },
+                "fold_6": {
+                    "train score": {
+                        "mae_score": 0.9192216324699818
+                    },
+                    "valid score": {
+                        "mae_score": 0.9339813995507654
+                    }
+                },
+                "fold_7": {
+                    "train score": {
+                        "mae_score": 0.3980551453637896
+                    },
+                    "valid score": {
+                        "mae_score": 0.41204617663727927
+                    }
+                },
+                "fold_8": {
+                    "train score": {
+                        "mae_score": 0.3766309230975183
+                    },
+                    "valid score": {
+                        "mae_score": 0.3910277351229734
+                    }
+                },
+                "fold_9": {
+                    "train score": {
+                        "mae_score": 0.5824659960610558
+                    },
+                    "valid score": {
+                        "mae_score": 0.7174852588622047
+                    }
+                }
+            }
+        }
     }
 }

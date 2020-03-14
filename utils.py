@@ -128,6 +128,9 @@ def generate_scaffold_metrics(model, data_valid, metric, transformers):
         for i, scaffold in enumerate(scaffold_sets):
             # Taking a subset of data is possible only in this way
             print(f"Scaffold {i} size: {len(scaffold)}")
+            if len(scaffold) < 5:
+                print(f"Scaffold {i} is smaller than 5. Skipping...")
+                continue
             data_subset = data_valid.select(indices=scaffold)
             y_rescaled = data_subset.y
 
@@ -151,5 +154,5 @@ if __name__ == "__main__":
                             "./results/benchmark1_2/results_benchmark1_2_sorted.json")
     """
 
-    visualize_benchmark1_3_results("./results/benchmark1_3/results_benchmark1_3_.json",
+    visualize_benchmark1_3_results("./results/benchmark1_3/results_benchmark1_3_all.json",
                                    "./results/benchmark1_3/results_benchmark1_3_for_plots.json")

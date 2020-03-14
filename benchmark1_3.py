@@ -45,9 +45,9 @@ def get_model(model_name: str):
     return model
 
 splitter_dict = {
+    "Random": RandomSplitter(),
     "Scaffold": ScaffoldSplitterNew(),
     "MolecularWeight": MolecularWeightSplitterNew(),
-    "Random": RandomSplitter(),
     "Butina": ButinaSplitterNew(),
     }
 
@@ -78,8 +78,8 @@ if __name__ == "__main__":
             if splitter_name == "Scaffold":
                 scaffold_sets = splitter.generate_scaffolds(wang_train)
             if splitter_name == "Random":
-                scaffold_sets = splitter.split(wang_train, frac_train=0.33,
-                                               frac_valid=0.33, frac_test=0.34)
+                scaffold_sets = splitter.split(wang_train, frac_train=0.32,
+                                               frac_valid=0.33, frac_test=0.35)
 
             logging.info(f"Scaffolds sets size: {len(scaffold_sets)}")
             logging.info(f"Scaffolds length: {[len(sfd) for sfd in scaffold_sets]}")

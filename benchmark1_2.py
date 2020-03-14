@@ -4,13 +4,13 @@ import logging
 logging.getLogger().setLevel(logging.INFO)
 
 import numpy as np
+import tensorflow as tf
 import deepchem as dc
 from deepchem.models import GraphConvModel, WeaveModel
 from deepchem.models import MultitaskRegressor
-from deepchem.models import ValidationCallback
+from deepchem.hyper import HyperparamOpt
 from rdkit import Chem
 
-from preprocessing import ScaffoldSplitterNew
 from data import load_wang_data_gcn
 from utils import generate_scaffold_metrics
 
@@ -19,6 +19,23 @@ model_dict = {
     "GraphConv": GraphConvModel,
     "Weave": WeaveModel,
     "ECFP": MultitaskRegressor,
+}
+params_dict = {
+    "GraphConv": {
+        "graph_conv_layers": [[32, 32], [64, 64], [128, 128]],
+        "dense_layer_size": [128, 256, 512],
+        "dropout": [0.0, 0.2],
+        "mode": ["regression"]
+    },
+    "Weave": {
+        "n_hidden": [32, 64, 128],
+        "mode": ["regression"]
+    },
+    "ECFP": {
+        "layer_sizes": [[1000], [1000, 1000], [1000, 1000, 1000]],
+        "dropouts": [0.0, 0.2, 0.5],
+        "activation_fns": [tf.nn.leaky_relu]
+    }
 }
 splitter_methods = ["random"]
 path_results = "./results/benchmark1_2/results_benchmark1_2.json"
@@ -41,29 +58,39 @@ if __name__ == "__main__":
             logging.info(f"Size of the validation data: {len(wang_valid.ids)}")
 
             if model_name == "ECFP":
-                model = model_obj(len(wang_tasks),
-                                  wang_train.get_data_shape()[0],
-                                  batch_size=50,
-                                  model_dir=f"./results/benchmark1_2/tensorboard_logs/{splitter}/{model_name}",
-                                  tensorboard=True,
-                                  tensorboard_log_frequency=25)
+                params_model = params_dict[model_name]
+                params_model["n_tasks"] = [len(wang_tasks)]
+                params_model["n_features"] = [wang_train.get_data_shape()[0]]
+                params_model["batch_size"] = [50]
+                
+            if model_name == "GraphConv":
+                params_model = params_dict[model_name]
+                params_model["n_tasks"] = [len(wang_tasks)]
+                params_model["batch_size"] = [50]
+                
+            if model_name == "Weave":
+                params_model = params_dict[model_name]
+                params_model["n_tasks"] = [len(wang_tasks)]
+                params_model["batch_size"] = [50]
 
-            else:
-                model = model_obj(len(wang_tasks),
-                                  batch_size=50,
-                                  mode='regression',
-                                  model_dir=f"./results/benchmark1_2/tensorboard_logs/{splitter}/{model_name}",
-                                  tensorboard=True,
-                                  tensorboard_log_frequency=25)
+            def model_builder(model_params, model_dir):
+                return model_obj(**model_params, model_dir=model_dir)
+
             # Pearson metric won't be applicable for small scaffolds!
             # For smaller size scaffolds use rms
             metric = dc.metrics.Metric(dc.metrics.mae_score)
-            # After 25 batch updates, measure the loss
-            loss_logger = ValidationCallback(wang_valid,
-                                             interval=25,
-                                             metrics=[metric])
+            opt = HyperparamOpt(model_builder)
+            params_best, score_best = opt.hyperparam_search(params_model, 
+                                                            wang_train,
+                                                            wang_valid,
+                                                            wang_transformers,
+                                                            metric)
 
-            logging.info(f"Fitting the model: {model_name}")
+            logging.info(f"Best score for {model_name}: {score_best}")
+            logging.info(f"Best params for {model_name}: {params_best}")
+            model = model_obj(**params_best)
+            
+            logging.info(f"Fitting the best model model: {model_name}")
             model.fit(wang_train, nb_epoch=10)
 
             train_scores = model.evaluate(wang_train,
@@ -72,7 +99,8 @@ if __name__ == "__main__":
             valid_scores = generate_scaffold_metrics(model,
                                                      wang_valid,
                                                      metric,
-                                                     wang_transformers)
+                                                     wang_transformers,
+                                                     logdir=None)
 
             results[splitter][model_name] = {}
             results[splitter][model_name]["train_score"] = train_scores

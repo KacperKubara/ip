@@ -1,5 +1,6 @@
 # Script implementing the 1st benchmark from my IP project
 # ToDo: Reimplement scaffold to give all clusters separetely
+# Look at Benchmark1_2.py -> this is not functional
 import logging
 logging.getLogger().setLevel(logging.INFO)
 
