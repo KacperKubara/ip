@@ -28,7 +28,7 @@ if __name__ == "__main__":
     for name, splitter in splitter_dict.items():
         if name == "Butina":
             results = [list(), list(), list(), list()]
-            for i in range (0, 100):
+            for i in range (0, 10, 100):
                 print(f"Generating Butina scaffold: {i}")
                 i_float = float(i)/100
                 scaffold_sets = splitter.generate_scaffolds(wang_train, cutoff=i_float)
@@ -153,5 +153,8 @@ if __name__ == "__main__":
     scaffold_sets = splitter_mw.generate_scaffolds(MiniBatchKMeans, model_dict)
     print(scaffold_sets)
     print(len(scaffold_sets))
+    print(f"Heavy molecule count: {len(df[labels==0].index)}")
+    print(f"Medium molecule count: {len(df[labels==2].index)}")
+    print(f"Light molecule count: {len(df[labels==1].index)}")
     for arr in scaffold_sets:
         print(f"Length of the array: {len(arr)}")
