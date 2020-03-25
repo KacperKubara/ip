@@ -1,4 +1,6 @@
 # Script to analyze statistical properties of the scaffold
+from copy import deepcopy
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -25,6 +27,43 @@ if __name__ == "__main__":
     
     for name, splitter in splitter_dict.items():
         if name == "Butina":
+            results = [list(), list(), list(), list()]
+            for i in range (0, 100):
+                print(f"Generating Butina scaffold: {i}")
+                i_float = float(i)/100
+                scaffold_sets = splitter.generate_scaffolds(wang_train, cutoff=i_float)
+                scaffold_dict_sum = {k: len(v) for k, v in enumerate(scaffold_sets)}
+                scaffold_sum = [v for v in scaffold_dict_sum.values()]
+                more_than_5 =  len([v for v in scaffold_sum if v >= 5 and v < 50])
+                more_than_50 =  len([v for v in scaffold_sum if v >= 50 and v <= 100])
+                more_than_100 =  len([v for v in scaffold_sum if v >= 100])
+
+                results[0].append(i_float)
+                results[1].append(more_than_5)
+                results[2].append(more_than_50)
+                results[3].append(more_than_100)
+            
+            results_dict = {}
+            results_dict["x"] = deepcopy(results[0])
+            results_dict["Count"] = results[1]
+            results_dict["Type"] = ["50> count >=5" for i in range(len(results[1]))]
+
+            results_dict["x"] += deepcopy(results[0])
+            results_dict["Count"] += results[2]
+            results_dict["Type"] += ["100> count >=50" for i in range(len(results[2]))]
+
+            results_dict["x"] += deepcopy(results[0])
+            results_dict["Count"] += results[3]
+            results_dict["Type"] += ["count >=100" for i in range(len(results[3]))]
+            
+            print(results_dict)
+            sc_plot = sns.scatterplot(x="x", y="Count", hue="Type", data=results_dict)
+            plt.title(f'Butina Sweep: Count of cluster sizes for specific Tanimoto threshold')
+            plt.xlabel('Tanimoto threshold')
+            plt.ylabel('Count of clusters')
+            sc_plot.figure.savefig(path_results + f"/Butina_sweep.png")
+            plt.clf()
+
             scaffold_sets = splitter.generate_scaffolds(wang_train, cutoff=0.8)
         else:
             scaffold_sets = splitter.generate_scaffolds(wang_train)

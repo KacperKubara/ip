@@ -97,7 +97,7 @@ def visualize_benchmark1_3_results(path_read: str = None, path_write: str = None
         print(df["scaffold"].unique())
         ax = sns.boxplot(x="model", y="mae", hue="scaffold", 
                         data=df_converter_temp, palette="Set3")
-        ax.set(xlabel='Models', ylabel='MAE')
+        ax.set(xlabel='Models', ylabel='MAE', ylim=(0, 1.4))
         ax.set_title(f'MAE with different models on scaffolded data ({splitter_name})')
         ax.figure.savefig(path_write[:-4] + f"_{splitter_name}_boxplots.png")
         plt.clf()
