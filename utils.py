@@ -140,9 +140,11 @@ def generate_scaffold_metrics(model, data_valid, metric, transformers):
             y_rescaled = y_rescaled.ravel().tolist()
 
             valid_scores = model.evaluate(data_subset, [metric], transformers)
+            logp_pred = model.predict(data_subset, transformer)
             results[splitter_name][f"Scaffold_{i}"] = {}
             results[splitter_name][f"Scaffold_{i}"]["results"] = valid_scores
-            results[splitter_name][f"Scaffold_{i}"]["results"]["logP"] = y_rescaled
+            results[splitter_name][f"Scaffold_{i}"]["results"]["logP_true"] = y_rescaled
+            results[splitter_name][f"Scaffold_{i}"]["results"]["logP_pred"] = logp_pred
             results[splitter_name][f"Scaffold_{i}"]["results"]["logP_mean"] = float(np.mean(y_rescaled))
             results[splitter_name][f"Scaffold_{i}"]["results"]["logP_std"] = float(np.std(y_rescaled))
             results[splitter_name][f"Scaffold_{i}"]["smiles"] = data_valid.ids[scaffold].tolist()
