@@ -82,7 +82,7 @@ if __name__ == "__main__":
             # For smaller size scaffolds use rms
             metric = dc.metrics.Metric(dc.metrics.mae_score)
             opt = HyperparamOpt(model_builder)
-            params_best, score_best, all_results = opt.hyperparam_search(params_model, 
+            model, score_best, all_results = opt.hyperparam_search(params_model, 
                                                                         wang_train,
                                                                         wang_valid,
                                                                         wang_transformers,
@@ -90,9 +90,9 @@ if __name__ == "__main__":
             
             logging.info(f"Best score for {model_name}: {score_best}")
             logging.info(f"All results for {model_name}: {all_results}")
-            logging.info(f"Best params for {model_name}: {params_best}")
-            params_save[model_name] = deepcopy(params_best)
-            model = model_obj(**params_best)
+            #logging.info(f"Best params for {model_name}: {params_best}")
+            params_save[model_name] = str(deepcopy(score_best))
+            #model = model_obj(**params_best)
             
             logging.info(f"Fitting the best model model: {model_name}")
             model.fit(wang_train, nb_epoch=10)
@@ -103,8 +103,7 @@ if __name__ == "__main__":
             valid_scores = generate_scaffold_metrics(model,
                                                      wang_valid,
                                                      metric,
-                                                     wang_transformers,
-                                                     logdir=None)
+                                                     wang_transformers)
 
             results[splitter][model_name] = {}
             results[splitter][model_name]["train_score"] = train_scores
@@ -114,5 +113,7 @@ if __name__ == "__main__":
         logging.info(f"Results has been saved to {path_results}")
         with open(path_results, 'w') as json_f:
             json.dump(results, json_f)
+        
         with open(path_best_params, 'w') as json_f:
-            json.dump(params_best, json_f)
+            json.dump(params_save   , json_f)
+    

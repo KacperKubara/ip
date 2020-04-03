@@ -34,7 +34,7 @@ def average(x: list) -> float:
     return average
 
 
-def sort_benchmark1_results(path_read: str, path_write: str):
+def sort_and_filter_benchmark1_results(path_read: str, path_write: str):
     results_dict = {}
     with open(path_read, 'r') as json_f:
         results_dict = json.load(json_f)
@@ -42,6 +42,18 @@ def sort_benchmark1_results(path_read: str, path_write: str):
     for splitter, dict1 in results_dict.items():
         for model, dict2 in dict1.items():
             dict_valid = dict2["valid_score"]
+            # Pass only instances that have std smaller than 1
+            # Only clusters that are bigger than 5 (done in the ml pipeline alread)
+            dict_valid_filter = {}
+            for scaffold_name, scaffold_dict in dict_valid.items():
+                dict_valid_filter[scaffold_name] = {}
+                for scaffold_num, scaffold in scaffold_dict.items():
+                    if scaffold["results"]["logP_std"] < 1.1:
+                        dict_valid_filter[scaffold_name][scaffold_num] = scaffold
+                dict_valid[scaffold_name] = dict_valid_filter[scaffold_name]
+            # Sort
+            print(dict_valid_filter)
+            print(dict_valid)
             for splitter_name, dict_split in dict_valid.items():
                 tuple_sorted = sorted(dict_split.items(),
                                       key=lambda t: t[1]["results"]["mae_score"])
@@ -51,6 +63,77 @@ def sort_benchmark1_results(path_read: str, path_write: str):
     with open(path_write, 'w') as json_f:
         json.dump(results_dict, json_f)
 
+def find_threshold_std_benchmark1(path_read: str, path_write: str):
+    results_dict = {}
+    with open(path_read, 'r') as json_f:
+        results_dict = json.load(json_f)
+    result_plot = {
+        "std_threshold": [],
+        "model": [],
+        "cluster_cnt": []
+    }
+    for i in range(0, 30):
+        threshold_val = i/10.0
+        results_dict_temp = deepcopy(results_dict)
+        for splitter, dict1 in results_dict_temp.items():
+            for model, dict2 in dict1.items():
+                dict_valid = dict2["valid_score"]
+                # Pass only instances that have std smaller than 1
+                # Only clusters that are bigger than 5 (done in the ml pipeline alread)
+                dict_valid_filter = {}
+                for scaffold_name, scaffold_dict in dict_valid.items():
+                    dict_valid_filter[scaffold_name] = {}
+                    for scaffold_num, scaffold in scaffold_dict.items():
+                        if float(scaffold["results"]["logP_std"]) < threshold_val:
+                            dict_valid_filter[scaffold_name][scaffold_num] = scaffold
+                    dict_valid[scaffold_name] = dict_valid_filter[scaffold_name]
+                    #print(dict_valid[scaffold_name])
+                    result_plot["cluster_cnt"] += deepcopy([len(dict_valid[scaffold_name])])
+                    result_plot["std_threshold"] += deepcopy([threshold_val])
+                    result_plot["model"] += deepcopy([f"{model}_{scaffold_name}"])
+                    
+    ax = sns.lineplot(x="std_threshold", y="cluster_cnt", 
+                        hue="model", data=pd.DataFrame(result_plot),
+                        palette="Set2")
+    plt.legend(frameon=False)
+    #ax.set(xlabel='Models', ylabel='MAE', ylim=(0, 1.4))
+    ax.set_title(f"Filtering clusters based on different std values of true logP")
+    ax.figure.savefig(path_write + f"threshold_Sweep.png")
+    plt.clf()
+
+            
+def visualize_benchmark1_results(path_read: str, path_write: str):
+    results_dict = {}
+    with open(path_read, 'r') as json_f:
+        results_dict = json.load(json_f)
+
+    for splitter, dict1 in results_dict.items():
+        for model, dict2 in dict1.items():
+            dict_valid = dict2["valid_score"]
+            for splitter_name, dict_split in dict_valid.items():
+                # Top 5 or less clusters for analysis of data
+                if len(dict_split) < 1:
+                    print(f"{splitter_name} for {model} doesn't have any generated clusters")
+                    continue
+                data = {
+                    "True logP": [],
+                    "Predicted logP": [],
+                    "scaffold": []
+                }
+                for i, key in enumerate(dict_split):
+                    print(dict_split[key])
+                    print(key)
+                    data["True logP"]+=dict_split[key]["results"]["logP_true"]
+                    data["Predicted logP"]+=dict_split[key]["results"]["logP_pred"]
+                    data["scaffold"]+=[key for i in range(len(dict_split[key]["results"]["logP_true"]))]
+                print(data)
+                ax = sns.scatterplot(x="Predicted logP", y="True logP", 
+                                     hue="scaffold", data=pd.DataFrame(data),
+                                     palette="Set2", s=100)
+                sns.set(font_scale=1.2)
+                ax.set_title(f"True vs Predicted logP for {model} model on {splitter_name} split")
+                ax.figure.savefig(path_write + f"plot_{model}_{splitter_name}.png")
+                plt.clf()
 
 def visualize_benchmark1_3_results(path_read: str = None, path_write: str = None):
     results_dict = {}
@@ -140,7 +223,8 @@ def generate_scaffold_metrics(model, data_valid, metric, transformers):
             y_rescaled = y_rescaled.ravel().tolist()
 
             valid_scores = model.evaluate(data_subset, [metric], transformers)
-            logp_pred = model.predict(data_subset, transformer)
+            logp_pred = model.predict(data_subset, transformers).ravel().tolist()
+            print(f"Predicted logp: {logp_pred} \n True logp: {y_rescaled}")
             results[splitter_name][f"Scaffold_{i}"] = {}
             results[splitter_name][f"Scaffold_{i}"]["results"] = valid_scores
             results[splitter_name][f"Scaffold_{i}"]["results"]["logP_true"] = y_rescaled
@@ -151,10 +235,17 @@ def generate_scaffold_metrics(model, data_valid, metric, transformers):
     return results
 
 if __name__ == "__main__":
-    """    
-    sort_benchmark1_results("./results/benchmark1_2/results_benchmark1_2.json",
-                            "./results/benchmark1_2/results_benchmark1_2_sorted.json")
     """
+    find_threshold_std_benchmark1("./results/benchmark1_2/results_benchmark1_2.json",
+                                       "./results/benchmark1_2/")
+    """
+    sort_and_filter_benchmark1_results("./results/benchmark1_2/results_benchmark1_2.json",
+                                       "./results/benchmark1_2/results_benchmark1_2_sorted_and_filtered.json")
 
+
+    visualize_benchmark1_results("./results/benchmark1_2/results_benchmark1_2_sorted_and_filtered.json",
+                                        "./results/benchmark1_2/")
+    """
     visualize_benchmark1_3_results("./results/benchmark1_3/results_benchmark1_3_all.json",
                                    "./results/benchmark1_3/results_benchmark1_3_for_plots.json")
+    """

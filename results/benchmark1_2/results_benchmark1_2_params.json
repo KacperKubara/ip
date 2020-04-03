@@ -1,0 +1,5 @@
+{
+    "GraphConv": "([32, 32], 512, 0.0, 'regression', 1, 50)",
+    "Weave": "(128, 'regression', 1, 50)",
+    "ECFP": "([1000], 0.0, <function leaky_relu at 0x7fe6fcf20bf8>, 1, 1024, 50)"
+}
