@@ -1,4 +1,4 @@
-"""Configuration file for paths, setting, etc."""
+""" Configuration file for paths, setting, etc."""
 PATH_EDA = "./eda"
 # Solubility Challenge dataset
 PATH_RESULTS = "./results/sol_challenge"
@@ -12,6 +12,3 @@ PATH_RESULTS_EDA_DIST_WANG_DATA = "./results/wang_dataset/eda/distribution"
 PATH_RESULTS_EDA_CORR_WANG_DATA = "./results/wang_dataset/eda/correlation"
 PATH_WANG_DATA = "/home/kjk1u17/ip/ip/data/wang_dataset/wang_data.csv"
 PATH_WANG_DATA_SMILES = "/home/kjk1u17/ip/ip/data/wang_dataset/wang_data_smiles.csv"
-#PATH_WANG_DATA_SMILES = "/home/kjk1u17/ip/ip/data/wang_dataset/wang_data_smiles_no_dups.csv"
-#PATH_WANG_DATA_SMILES = "/home/kjk1u17/ip/ip/data/wang_dataset/wang_data_smiles_no_dups_no_heavy.csv"
-#PATH_WANG_DATA_SMILES = "/home/kjk1u17/ip/ip/data/wang_dataset/wang_data_smiles_no_heavy.csv"

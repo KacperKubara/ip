@@ -1,4 +1,4 @@
-# Script to analyze statistical properties of the scaffold
+""" Script to analyze statistical properties of the scaffold """
 from copy import deepcopy
 
 import numpy as np

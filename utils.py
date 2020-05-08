@@ -14,25 +14,12 @@ from sklearn.cluster import MiniBatchKMeans
 
 
 def average(x: list) -> float:
-    """ Averages all elements in the list
-
-    Parameters
-    ----------
-    x : [int, float]
-        list with int or float elements
-
-    Returns
-    -------
-    float, np.nan:
-        Returns float value when averaging is successful.
-        np.nan otherwise
-    """
+    """ Averages all elements in the list"""
     try:
         average = sum(x)/float(len(x))
     except (TypeError, ValueError):
         average = np.nan
     return average
-
 
 def sort_and_filter_benchmark1_results(path_read: str, path_write: str):
     results_dict = {}
@@ -102,7 +89,7 @@ def find_threshold_std_benchmark1(path_read: str, path_write: str):
     plt.clf()
 
             
-def visualize_benchmark1_results(path_read: str, path_write: str):
+def visualize_benchmark1_2_results(path_read: str, path_write: str):
     results_dict = {}
     with open(path_read, 'r') as json_f:
         results_dict = json.load(json_f)
@@ -258,7 +245,7 @@ if __name__ == "__main__":
     sort_and_filter_benchmark1_results("./results/benchmark1_2/results_benchmark1_2.json",
                                        "./results/benchmark1_2/results_benchmark1_2_sorted_and_filtered.json")
     
-    visualize_benchmark1_results("./results/benchmark1_2/results_benchmark1_2_sorted_and_filtered.json",
+    visualize_benchmark1_2_results("./results/benchmark1_2/results_benchmark1_2_sorted_and_filtered.json",
                                         "./results/benchmark1_2/")
     """
 

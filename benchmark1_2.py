@@ -1,4 +1,6 @@
-# Script implementing the 1st benchmark from my IP project
+"""
+Script implementing the Method 2 from my IP project
+"""
 import json
 import logging
 from copy import deepcopy

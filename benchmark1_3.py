@@ -1,7 +1,4 @@
-# Do the Scaffold Split
-# Take the k (2) biggest scaffolds
-# Generate 10 different folds with RandomSplitter
-# Get the scores with the uncertainty range
+""" Script implementing the Method 3 from my project"""
 import json
 import logging
 logging.getLogger().setLevel(logging.INFO)
@@ -30,9 +27,6 @@ model_dict = {
     "GraphConv": GraphConvModel,
     }
 path_base = "./results/benchmark1_3/results_benchmark1_3_random_"
-#path_base = "./results/benchmark1_3/results_benchmark1_3_random_no_dups_"
-#path_base = "./results/benchmark1_3/results_benchmark1_3_random_no_dups_no_heavy_"
-#path_base = "./results/benchmark1_3/results_benchmark1_3_random_no_heavy_"
 
 def get_model(model_name: str):
     if model_name == "ECFP":
