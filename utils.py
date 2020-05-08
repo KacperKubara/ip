@@ -127,34 +127,48 @@ def visualize_benchmark1_results(path_read: str, path_write: str):
                     data["Predicted logP"]+=dict_split[key]["results"]["logP_pred"]
                     data["scaffold"]+=[key for i in range(len(dict_split[key]["results"]["logP_true"]))]
                 print(data)
+                plt.clf()
                 ax = sns.scatterplot(x="Predicted logP", y="True logP", 
                                      hue="scaffold", data=pd.DataFrame(data),
                                      palette="Set2", s=100)
-                sns.set(font_scale=1.2)
-                ax.set_title(f"True vs Predicted logP for {model} model on {splitter_name} split")
+                ax.grid(True)
+                ax.set_title(f"True vs Pred logP: {model} model on {splitter_name} split")
+                ax.set(ylim=(-2, 7), xlim=(-2, 7))
+                ax.xaxis.labelpad = 0
+                ax.yaxis.labelpad = -1
+                ax.legend(framealpha=0.3)
+                sns.set(font_scale=1.35)
+                sns.set_style('whitegrid')
+                X_plot = np.linspace(-2, 7, 100)
+                plt.plot(X_plot, X_plot, c="k")
                 ax.figure.savefig(path_write + f"plot_{model}_{splitter_name}.png")
                 plt.clf()
 
 def visualize_benchmark1_3_results(path_read: str = None, path_write: str = None):
-    results_dict = {}
-    with open(path_read, 'r') as json_f:
-        results_dict = json.load(json_f)
+    if path_read != path_write:
+        results_dict = {}
+        with open(path_read, 'r') as json_f:
+            results_dict = json.load(json_f)
 
-    data_plot = {}
-    for splitter_name, dict0 in results_dict.items():
-        data_plot[splitter_name] = {}
-        for model_name, dict1 in dict0.items():
-            data_plot[splitter_name][model_name] = {}
-            for scaffold_name, dict2 in dict1.items():
-                data_plot[splitter_name][model_name][scaffold_name] = {}
-                arr_temp = []
-                for fold_name, dict3 in dict2.items():
-                    arr_temp.append(dict3["valid score"]["mae_score"])
-                data_plot[splitter_name][model_name][scaffold_name]["valid_mae"] = arr_temp
+        data_plot = {}
+        for splitter_name, dict0 in results_dict.items():
+            data_plot[splitter_name] = {}
+            for model_name, dict1 in dict0.items():
+                data_plot[splitter_name][model_name] = {}
+                for scaffold_name, dict2 in dict1.items():
+                    data_plot[splitter_name][model_name][scaffold_name] = {}
+                    arr_temp = []
+                    for fold_name, dict3 in dict2.items():
+                        arr_temp.append(dict3["valid score"]["mae_score"])
+                    data_plot[splitter_name][model_name][scaffold_name]["valid_mae"] = arr_temp
 
-    # Save the data for preliminary insights
-    with open(path_write, 'w') as json_f:
-        json.dump(data_plot, json_f)
+        # Save the data for preliminary insights
+        with open(path_write, 'w') as json_f:
+            json.dump(data_plot, json_f)
+    else:
+        # Save the data for preliminary insights
+        with open(path_write, 'r') as json_f:
+            data_plot = json.load(json_f)
 
     df_converter_temp = {
         "model": [], 
@@ -178,9 +192,12 @@ def visualize_benchmark1_3_results(path_read: str = None, path_write: str = None
         print(splitter_name)
         df = pd.DataFrame(df_converter_temp)
         print(df["scaffold"].unique())
+        sns.set(font_scale=1.2)
+        sns.set_style("darkgrid")
         ax = sns.boxplot(x="model", y="mae", hue="scaffold", 
                         data=df_converter_temp, palette="Set3")
-        ax.set(xlabel='Models', ylabel='MAE', ylim=(0, 1.4))
+        ax.legend(loc="lower left", framealpha=0.3)
+        ax.set(xlabel='Models', ylabel='MAE', ylim=(0, 2))
         ax.set_title(f'MAE with different models on scaffolded data ({splitter_name})')
         ax.figure.savefig(path_write[:-4] + f"_{splitter_name}_boxplots.png")
         plt.clf()
@@ -238,14 +255,24 @@ if __name__ == "__main__":
     """
     find_threshold_std_benchmark1("./results/benchmark1_2/results_benchmark1_2.json",
                                        "./results/benchmark1_2/")
-    """
     sort_and_filter_benchmark1_results("./results/benchmark1_2/results_benchmark1_2.json",
                                        "./results/benchmark1_2/results_benchmark1_2_sorted_and_filtered.json")
-
-
+    
     visualize_benchmark1_results("./results/benchmark1_2/results_benchmark1_2_sorted_and_filtered.json",
                                         "./results/benchmark1_2/")
+    """
+
     """
     visualize_benchmark1_3_results("./results/benchmark1_3/results_benchmark1_3_all.json",
                                    "./results/benchmark1_3/results_benchmark1_3_for_plots.json")
     """
+    visualize_benchmark1_3_results("./results/benchmark1_3/results_benchmark1_3_random_.json",
+                                "./results/benchmark1_3/results_benchmark1_3_random_.json")
+    visualize_benchmark1_3_results("./results/benchmark1_3/results_benchmark1_3_random_no_dups_.json",
+                                "./results/benchmark1_3/no_dups/results_benchmark1_3_random_no_dups.json")
+    visualize_benchmark1_3_results("./results/benchmark1_3/results_benchmark1_3_random_no_dups_no_heavy_.json",
+                                   "./results/benchmark1_3/no_dups_no_heavy/results_benchmark1_3_random_no_dups_no_heavy_.json")
+    visualize_benchmark1_3_results("./results/benchmark1_3/results_benchmark1_3_random_no_heavy_.json",
+                                   "./results/benchmark1_3/no_heavy/results_benchmark1_3_random_no_heavy_.json")
+    
+    

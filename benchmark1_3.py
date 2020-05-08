@@ -25,11 +25,14 @@ kmeans_dict = {
 
 # GCN models used for the benchmark
 model_dict = {
-    "GraphConv": GraphConvModel,
-    "Weave": WeaveModel,
     "ECFP": MultitaskRegressor,
+    "Weave": WeaveModel,
+    "GraphConv": GraphConvModel,
     }
-path_base = "./results/benchmark1_3/results_benchmark1_3_"
+path_base = "./results/benchmark1_3/results_benchmark1_3_random_"
+#path_base = "./results/benchmark1_3/results_benchmark1_3_random_no_dups_"
+#path_base = "./results/benchmark1_3/results_benchmark1_3_random_no_dups_no_heavy_"
+#path_base = "./results/benchmark1_3/results_benchmark1_3_random_no_heavy_"
 
 def get_model(model_name: str):
     if model_name == "ECFP":
@@ -46,9 +49,9 @@ def get_model(model_name: str):
 
 splitter_dict = {
     "Random": RandomSplitter(),
-    "Scaffold": ScaffoldSplitterNew(),
-    "MolecularWeight": MolecularWeightSplitterNew(),
-    "Butina": ButinaSplitterNew(),
+    #"Scaffold": ScaffoldSplitterNew(),
+    #"MolecularWeight": MolecularWeightSplitterNew(),
+    #"Butina": ButinaSplitterNew(),
     }
 
 
@@ -78,8 +81,28 @@ if __name__ == "__main__":
             if splitter_name == "Scaffold":
                 scaffold_sets = splitter.generate_scaffolds(wang_train)
             if splitter_name == "Random":
-                scaffold_sets = splitter.split(wang_train, frac_train=0.32,
-                                               frac_valid=0.33, frac_test=0.35)
+                # Get approx 1000~ elements in each scaffold
+                scaffold_sets_temp = splitter.split(wang_train, frac_train=0.54,
+                                                   frac_valid=0.45, frac_test=0.01)
+                # Scaffolds ~sizes: 800
+                scaffold_sets_temp0 = [scaffold_sets_temp[0][:800]]
+                # Scaffolds ~sizes: 400 200 100 
+                scaffold_sets_temp1 = [scaffold_sets_temp[0][:100], 
+                                       scaffold_sets_temp[0][100:300],
+                                       scaffold_sets_temp[0][300:700]]
+                """                  
+                scaffold_sets_temp0 = splitter.split(scaffold_sets_temp[0], frac_train=0.55,
+                                                   frac_valid=0.275, frac_test=0.175)
+                scaffold_sets_temp1 = splitter.split(scaffold_sets_temp[1], frac_train=0.5,
+                                                   frac_valid=0.41, frac_test=0.09)
+                # Scaffolds ~sizes: 1000                               
+                scaffold_sets_temp2 = splitter.split(scaffold_sets_temp[2], frac_train=0.98,
+                                                   frac_valid=0.01, frac_test=0.01)
+                """
+                scaffold_sets = scaffold_sets_temp0 + scaffold_sets_temp1
+                                                   
+                
+
 
             logging.info(f"Scaffolds sets size: {len(scaffold_sets)}")
             logging.info(f"Scaffolds length: {[len(sfd) for sfd in scaffold_sets]}")
