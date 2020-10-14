@@ -1,5 +1,5 @@
 # Description
-Final Year Individual Project at the University of Southampton.
+Final Year Individual Project at the University of Southampton. Awarded With a Zepler Project Prize
 # Installation tips
 The conda environment has been saved as env_info.yaml
 You can reproduce the environment by simply running the command:
