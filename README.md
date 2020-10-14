@@ -1,4 +1,3 @@
-# Description
 Final Year Individual Project at the University of Southampton. Awarded With a Zepler Project Prize
 
 # Abstract
